@@ -19,8 +19,8 @@ func init() {
 type Mode string
 
 const (
-	ModeDevelopment Mode = "development"
-	ModeProduction  Mode = "production"
+	ModeDevelopment Mode = "dev"
+	ModeProduction  Mode = "prod"
 )
 
 type Config struct {

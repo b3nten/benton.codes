@@ -32,6 +32,16 @@ func (r *Router) Use(middleware Middleware) {
 	r.middlewares = append(r.middlewares, middleware)
 }
 
+func (r *Router) UseFunc(middleware func(next http.Handler) http.Handler) {
+	r.middlewares = append(r.middlewares, func(w http.ResponseWriter, req *http.Request, next NextFunc) *ErrorResponse {
+		var err *ErrorResponse = nil
+		middleware(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+			err = next()
+		})).ServeHTTP(w, req)
+		return err
+	})
+}
+
 func (r *Router) Handle(method string, pattern string, handler Handler) {
 	if !strings.HasPrefix(pattern, "/") {
 		pattern = "/" + pattern
