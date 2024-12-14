@@ -1,6 +1,17 @@
 package templates
 
-templ Shell(title string, description string) {
+type LinkTag struct {
+    Rel string
+    URL string
+}
+
+type ShellConfig struct {
+    Title string
+    Description string
+    Links []LinkTag
+}
+
+templ Shell(config ShellConfig) {
     <html lang="en">
     <head>
         <meta charset="UTF-8"/>
@@ -10,9 +21,11 @@ templ Shell(title string, description string) {
         <script type="module" src="/static/blackberry.js"/>
         <script type="module" src="/static/index.js"/>
         <script defer src="/static/alpine.js"/>
-
-        <title>{ title }</title>
-        <meta name="description" content={ description } />
+        <title>{ config.Title }</title>
+        <meta name="description" content={ config.Description } />
+         for _, link := range config.Links {
+            <link rel={ link.Rel} href={ link.URL }/>
+         }
     </head>
     <body>
         { children... }
@@ -20,13 +33,6 @@ templ Shell(title string, description string) {
     </html>
 }
 
-templ Header() {
-    <header>
-    </header>
+templ Spacer(x string, y string) {
+    <div {templ.Attributes{"style": "padding-left: " + x + "; padding-top: " + y + ";"}...} aria-hidden="true"></div>
 }
-
-templ Footer() {
-    <footer>
-    </footer>
-}
-

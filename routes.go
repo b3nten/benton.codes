@@ -11,10 +11,20 @@ import (
 //go:embed static
 var staticFiles embed.FS
 
-func ServeStatic(w http.ResponseWriter, req *http.Request) *ErrorResponse {
-	fs := http.FileServer(http.FS(staticFiles))
-	fs.ServeHTTP(w, req)
-	return nil
+func ServeStatic(mode Mode) Handler {
+	if mode == ModeDevelopment {
+		fs := http.FileServer(http.Dir("static"))
+		return func(w http.ResponseWriter, req *http.Request) *ErrorResponse {
+			http.StripPrefix("/static/", fs).ServeHTTP(w, req)
+			return nil
+		}
+	} else {
+		fs := http.FileServer(http.FS(staticFiles))
+		return func(w http.ResponseWriter, req *http.Request) *ErrorResponse {
+			fs.ServeHTTP(w, req)
+			return nil
+		}
+	}
 }
 
 func Render(component templ.Component) Handler {
@@ -39,7 +49,7 @@ func RegisterRoutes(config Config, logger *slog.Logger) http.Handler {
 	rtr.Use(Logging(logger))
 	rtr.Use(Compress(5))
 
-	rtr.Handle("GET", "/static/", ServeStatic)
+	rtr.Handle("GET", "/static/", ServeStatic(config.mode))
 
 	rtr.Handle("GET", "/", Render(templates.Home()))
 

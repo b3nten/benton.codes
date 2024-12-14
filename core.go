@@ -35,6 +35,7 @@ func GetMode() Mode {
 	} else {
 		return ModeDevelopment
 	}
+
 }
 
 func NewLogger() *slog.Logger {

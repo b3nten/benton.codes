@@ -8,6 +8,14 @@ package templates
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
+var shell = ShellConfig{
+	Title:       "Home",
+	Description: "Welcome to my website",
+	Links: []LinkTag{
+		{Rel: "stylesheet", URL: "/static/singlepage.css"},
+	},
+}
+
 func Home() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
@@ -41,21 +49,21 @@ func Home() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = Header().Render(ctx, templ_7745c5c3_Buffer)
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"header-title\">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</h1>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <main class=\"font-display\" style=\"font-size: 24px\">HellO!</main>")
+			templ_7745c5c3_Err = Spacer("0", "20rem").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = Footer().Render(ctx, templ_7745c5c3_Buffer)
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <main><h2>Projects</h2><h2>Work</h2><h2>About</h2><h2>Experiments</h2><h2>Blog</h2></main>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			return templ_7745c5c3_Err
 		})
-		templ_7745c5c3_Err = Shell("Home", "Home page").Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = Shell(shell).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -63,4 +71,21 @@ func Home() templ.Component {
 	})
 }
 
+// projects
+//  - elysia
+//  - vono
+//  - blackberry
+//  - lua html
+//  - imhtml
+
+// work
+//  - call of duty
+//  - house of the dragon
+//  - chefs table
+//  - droplab.com
+
+// thoughts
+// - loving results instead of tools
+// - beginners guide to elysia
+// - i love html
 var _ = templruntime.GeneratedTemplate

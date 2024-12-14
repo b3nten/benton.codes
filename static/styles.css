@@ -67,3 +67,7 @@ table {
 .font-display {
     font-family: 'VT323', monospace;
 }
+
+body {
+    padding: 1rem;
+}

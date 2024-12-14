@@ -1,27 +1,45 @@
 package templates
 
+var shell = ShellConfig{
+    Title: "Home",
+    Description: "Welcome to my website",
+    Links: []LinkTag{
+        {Rel: "stylesheet", URL: "/static/singlepage.css"},
+    },
+}
+
 templ Home() {
-    @Shell("Home", "Home page") {
-       @Header()
-       <main class="font-display" style="font-size: 24px">
 
-        projects
-        - elysia
-        - vono
-        - blackberry
-
-        work
-        - house of the dragon
-        - call of duty
-        - droplab.com
-        - chefs table
-
-        thoughts
-        - loving results instead of tools
-        - your first elysia project
-        - i love html
-
+    @Shell(shell) {
+       <h1 class="header-title">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+       </h1>
+        @Spacer("0", "1rem")
+       <main>
+        <h2>Projects</h2>
+        <h2>Work</h2>
+        <h2>About</h2>
+        <h2>Experiments</h2>
+        <h2>Blog</h2>
        </main>
-       @Footer()
     }
 }
+
+
+// projects
+//  - elysia
+//  - vono
+//  - blackberry
+//  - lua html
+//  - imhtml
+
+// work
+//  - call of duty
+//  - house of the dragon
+//  - chefs table
+//  - droplab.com
+
+// thoughts
+// - loving results instead of tools
+// - beginners guide to elysia
+// - i love html

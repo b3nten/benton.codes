@@ -17,7 +17,17 @@ func main() {
 
 	logger.Info("Starting server", "port", config.port)
 
-	if err := http.ListenAndServe(fmt.Sprintf(":%s", config.port), routes); err != nil {
-		logger.Error("Failed to start server:", "error", err)
+	server := &http.Server{
+		Addr:    fmt.Sprintf(":%s", config.port),
+		Handler: routes,
+	}
+
+	defer func() {
+		logger.Info("Shutting down server")
+		server.Close()
+	}()
+
+	if err := server.ListenAndServe(); err != nil {
+		logger.Error("Failed to start server", "error", err)
 	}
 }
