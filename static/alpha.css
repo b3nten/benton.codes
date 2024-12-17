@@ -1,0 +1,84 @@
+body {
+    background:  whitesmoke;
+    color: #1a1a1a;
+    font-family: 'Oxanium', serif;
+    font-weight: 200;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background: #0c0c0c;
+        color: whitesmoke;
+    }
+}
+
+.waypoint_root {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+.waypoint_title {
+    font-size: 1rem;
+    font-weight: 200;
+    line-height: 105%;
+    opacity: .75;
+    transform: translateY(1px);
+}
+.waypoint_list {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: .5rem;
+}
+.waypoint_link {
+    color: inherit;
+    text-decoration: none;
+    transition: color .2s;
+}
+
+.home_header {
+    font-family: 'Oxanium', monospace;
+    opacity: .55;
+    font-size: clamp(1.5rem, 0.5385rem + 3.8462vw, 3rem);
+    font-weight: 200;
+    letter-spacing: .1em;
+    line-height: 115%;
+    margin: 0 0 2rem;
+    max-width: 1024px;
+}
+
+.home_section_container {
+    margin-bottom: 1.5rem;
+    max-width: 628px;
+
+    & > p {
+        line-height: 125%;
+        font-weight: 350;
+    }
+}
+
+.home_section_title {
+    font-size: 1.24rem;
+    font-weight: 200;
+    line-height: 105%;
+    max-width: 1024px;
+    opacity: .75;
+    margin-bottom: .5rem;
+}
+
+.home_section_list {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    margin-bottom: 1.5rem;
+
+    & > li {
+        margin-bottom: .25rem;
+        & > a {
+            color: inherit;
+            text-decoration: none;
+            transition: color .2s;
+        }
+    }
+}
+

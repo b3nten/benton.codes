@@ -15,6 +15,8 @@ func ServeStatic(mode Mode) Handler {
 	if mode == ModeDevelopment {
 		fs := http.FileServer(http.Dir("static"))
 		return func(w http.ResponseWriter, req *http.Request) *ErrorResponse {
+			// no cache for development
+			w.Header().Set("Cache-Control", "no-cache")
 			http.StripPrefix("/static/", fs).ServeHTTP(w, req)
 			return nil
 		}

@@ -9,25 +9,41 @@ type ShellConfig struct {
     Title string
     Description string
     Links []LinkTag
+    BodyAttrs templ.Attributes
 }
 
 templ Shell(config ShellConfig) {
+    <!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link rel="stylesheet" href="/static/styles.css"/>
+
+        <script type="importmap">
+            {
+                "imports": {
+                    "three": "https://esm.sh/three@0.171.0",
+                    "three/" : "https://esm.sh/three@0.171.0/",
+                    "postprocessing": "https://esm.sh/v135/postprocessing@6.36.4/X-ZS90aHJlZQ/es2022/postprocessing.mjs",
+                    "elysia": "https://esm.sh/v135/gh/b3nten/elysia@2782bddba7/src/mod.ts?external=three,postprocessing"
+                }
+            }
+        </script>
+
         <script type="module" src="/static/blackberry.js"/>
         <script type="module" src="/static/index.js"/>
         <script defer src="/static/alpine.js"/>
+
         <title>{ config.Title }</title>
+        <link rel="stylesheet" href="/static/styles.css"/>
+        <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
         <meta name="description" content={ config.Description } />
          for _, link := range config.Links {
             <link rel={ link.Rel} href={ link.URL }/>
          }
     </head>
-    <body>
+    <body x-data {config.BodyAttrs...}>
         { children... }
     </body>
     </html>
@@ -35,4 +51,33 @@ templ Shell(config ShellConfig) {
 
 templ Spacer(x string, y string) {
     <div {templ.Attributes{"style": "padding-left: " + x + "; padding-top: " + y + ";"}...} aria-hidden="true"></div>
+}
+
+var decodedTextOnce = templ.NewOnceHandle()
+
+templ DecodedText(str string) {
+    @decodedTextOnce.Once() {
+        <script>
+            document.addEventListener('alpine:init', () => {
+                    const randomize = (el) => {
+
+                    }
+
+                    const animateDecodedText = (el) => {
+                       randomize(el)
+
+                    }
+
+                    Alpine.bind('DecodedText', () => ({
+                        '@mouseenter'() {
+                            animateDecodedText(this.$el)
+                        },
+                        'x-init'(){
+                            animateDecodedText(this.$el)
+                        },
+                    }))
+                })
+        </script>
+    }
+    <span x-bind="DecodedText" data-value={str}>{str}</span>
 }
