@@ -1,0 +1,10 @@
+# Ignore everything
+*
+!.gitignore
+!go.{mod,sum}
+# Allow src directory
+!core/
+!server/
+# Allow all .go files in the src directory
+!main.go
+!**/*.go
