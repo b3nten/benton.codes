@@ -1,4 +1,5 @@
-import "global"
-import { start } from "./include/blackberry@0.0.1";
+import init_blackberry from "blackberry.js";
+import "./encrypted_text.tsx"
+import "./window.tsx"
 
-start()
+init_blackberry();

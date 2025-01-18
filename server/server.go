@@ -14,7 +14,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
-func NewServer(c *core.Config) http.Handler {
+func NewServer(app *core.App) http.Handler {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
@@ -27,18 +27,21 @@ func NewServer(c *core.Config) http.Handler {
 		templates.HomePage().Render(w)
 	})
 
-	r.Get("/js/*", builder.JSBuildMiddleware(builder.JSBuilderConfig{
-		Directory: "./www/js",
-		Cache:     c.Mode == core.ModeProd,
+	r.Get("/__js/*", builder.JSBuildMiddleware(builder.JSBuilderConfig{
+		App: app,
+	}))
+
+	r.Get("/__css/*", builder.CSSBuildMiddleware(builder.JSBuilderConfig{
+		App: app,
 	}))
 
 	workDir, _ := os.Getwd()
-	filesDir := http.Dir(filepath.Join(workDir, "www/static"))
-	FileServer(r, "/static", filesDir)
+	filesDir := http.Dir(filepath.Join(workDir, app.StaticDir))
+	fileServer(r, "/static", filesDir)
 	return r
 }
 
-func FileServer(r chi.Router, path string, root http.FileSystem) {
+func fileServer(r chi.Router, path string, root http.FileSystem) {
 	if strings.ContainsAny(path, "{}*") {
 		panic("FileServer does not permit any URL parameters.")
 	}

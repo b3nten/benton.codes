@@ -8,7 +8,5 @@
     "jsxFactory": "h",
     "jsxFragmentFactory": "Fragment",
     "noEmit": true,
-
-    "types": ["include/global.ts"]
   },
 }

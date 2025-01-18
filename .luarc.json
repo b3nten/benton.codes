@@ -1,0 +1,10 @@
+{
+    "diagnostics.globals": [
+        "js",
+        "css",
+        "app"
+    ],
+    "diagnostics.disable": [
+        "lowercase-global"
+    ]
+}
