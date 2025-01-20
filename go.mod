@@ -6,11 +6,9 @@ require github.com/go-chi/chi/v5 v5.2.0 // direct
 
 require (
 	github.com/evanw/esbuild v0.24.2
+	github.com/yuin/gopher-lua v1.1.1
+	layeh.com/gopher-json v0.0.0-20201124131017-552bb3c4c3bf
 	maragu.dev/gomponents v1.0.0
 )
 
-require (
-	github.com/BurntSushi/toml v1.4.0 // indirect
-	github.com/yuin/gopher-lua v1.1.1 // indirect
-	golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 // indirect
-)
+require golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 // indirect

@@ -3,3 +3,5 @@ import "./encrypted_text.tsx"
 import "./window.tsx"
 
 init_blackberry();
+
+import("./async")

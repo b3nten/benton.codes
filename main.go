@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -9,9 +10,10 @@ import (
 )
 
 func main() {
-	app := core.LoadApp();
-	server := server.NewServer(app)
-	if err := http.ListenAndServe(":"+ strconv.Itoa(app.Port), server); err != nil {
+	a := core.LoadFromConfig()
+	s := server.NewServer(a)
+	fmt.Println("Starting server on port", a.Port)
+	if err := http.ListenAndServe(":"+strconv.Itoa(a.Port), s); err != nil {
 		panic(err)
 	}
 }

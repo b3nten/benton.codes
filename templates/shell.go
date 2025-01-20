@@ -1,6 +1,7 @@
 package templates
 
 import (
+	"benton.codes/core"
 	. "maragu.dev/gomponents"
 	. "maragu.dev/gomponents/components"
 	. "maragu.dev/gomponents/html"
@@ -33,29 +34,7 @@ func Spacer(x, y string) Node {
 	)
 }
 
-func CSSLink(e string) Node {
-	if e[0] == '/' {
-		e = e[1:]
-	}
-	return Link(
-		Rel("stylesheet"),
-		Type("text/css"),
-		Href("/__css/" + e),
-	)
-}
-
-func ScriptLink(e string, attrs... Node) Node {
-	if e[0] == '/' {
-		e = e[1:]
-	}
-	return Script(
-		append([]Node{
-			Src("/__js/" + e),
-		}, attrs...)...,
-	)
-}
-
-func EncryptedText(e string, args... string) Node {
+func EncryptedText(e string, args ...string) Node {
 	attrs := []Node{
 		Text(e),
 	}
@@ -68,7 +47,7 @@ func EncryptedText(e string, args... string) Node {
 	)
 }
 
-func Shell(title string, head []Node, children []Node) Node {
+func Shell(app *core.App, title string, head []Node, children []Node) Node {
 	return HTML5(HTML5Props{
 		Title:    title,
 		Language: "en",
@@ -76,12 +55,19 @@ func Shell(title string, head []Node, children []Node) Node {
 			StyleEl(
 				Raw(`body {transition: opacity .25s .3s;} [blackberry-cloak] {opacity: 0;}`),
 			),
-			ScriptLink("main.js", Type("module"), Attr("defer", "")),
-			CSSLink("global.css"),
 			Link(
 				Rel("icon"),
 				Type("image/x-icon"),
 				Href("/static/favicon.png"),
+			),
+			Link(
+				Rel("stylesheet"),
+				Href(app.GetAssetPath("global.css")),
+			),
+			Script(
+				Type("module"),
+				Defer(),
+				Src(app.GetAssetPath("main.js")),
 			),
 		}, head...),
 		Body: append([]Node{

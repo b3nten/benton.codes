@@ -1,43 +1,93 @@
 package server
 
 import (
+	"benton.codes/templates"
+	"maragu.dev/gomponents"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
 
-	"benton.codes/builder"
 	"benton.codes/core"
-	"benton.codes/templates"
+	"benton.codes/routes"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
 
-func NewServer(app *core.App) http.Handler {
-	r := chi.NewRouter()
+// All your routing usually happens here
+func registerRoutes(app *core.App, r *chi.Mux) {
+	registerLuaRoutes(app, r)
+
+	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		routes.HomePage(app).Render(w)
+	})
+}
+
+func registerMiddleware(app *core.App, r *chi.Mux) {
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.RequestID)
 	r.Use(middleware.RealIP)
 	r.Use(middleware.Heartbeat("/ping"))
 	r.Use(middleware.Compress(5))
+}
 
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		templates.HomePage().Render(w)
-	})
+func registerLuaRoutes(app *core.App, r *chi.Mux) {
+	for _, route := range app.Routes {
+		r.Get(route.Path, func(w http.ResponseWriter, r *http.Request) {
+			res := core.ServeLuaTemplate(route.Handler, core.LuaTable{})
 
-	r.Get("/__js/*", builder.JSBuildMiddleware(builder.JSBuilderConfig{
-		App: app,
-	}))
+			w.WriteHeader(res.Status)
 
-	r.Get("/__css/*", builder.CSSBuildMiddleware(builder.JSBuilderConfig{
-		App: app,
-	}))
+			for key, value := range res.Headers {
+				w.Header().Set(key, value)
+			}
 
+			if res.Shell {
+				templates.Shell(
+					app,
+					res.Title,
+					[]gomponents.Node{gomponents.Raw(res.Head)},
+					[]gomponents.Node{gomponents.Raw(res.Body)},
+				).Render(w)
+				return
+			}
+
+			w.Write([]byte(res.Body))
+		})
+	}
+}
+
+func registerAssets(app *core.App, r *chi.Mux) {
 	workDir, _ := os.Getwd()
-	filesDir := http.Dir(filepath.Join(workDir, app.StaticDir))
-	fileServer(r, "/static", filesDir)
+
+	// serve on demand builder route
+	{
+		r.Get("/_assets/*", core.AssetMiddleware(app))
+	}
+
+	// serve static dir
+	{
+		filesDir := http.Dir(filepath.Join(workDir, app.StaticDir))
+		fileServer(r, "/static", filesDir)
+	}
+
+	// If prod a build_immutable directory will exist
+	// this is where build assets live
+	{
+		if _, err := os.Stat(filepath.Join(workDir, "__immutable")); err == nil {
+			root := http.Dir(filepath.Join(workDir, "__immutable"))
+			fileServer(r, "/__immutable", root)
+		}
+	}
+}
+
+func NewServer(app *core.App) http.Handler {
+	r := chi.NewRouter()
+	registerMiddleware(app, r)
+	registerAssets(app, r)
+	registerRoutes(app, r)
 	return r
 }
 
