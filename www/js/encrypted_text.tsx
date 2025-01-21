@@ -29,8 +29,22 @@ export class EncryptedText extends Component {
   static light_dom = true;
 
   static chars = "abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*+-?";
-  static ignores = [" ", "\n", "\t", "\r", "\f", "\v"];
+  static ignores = [" ", "\n", "\t", "\r", "\f", "\v", ",", ".", "!", "?", ":", ";", "'", "\"", "`", "~", "(", ")", "[", "]", "{", "}", "<", ">", "|", "\\", "/", "_", "-", "=", "+", "*", "&", "^", "%", "$", "#", "@", "!"];
   static get_random_char = () => EncryptedText.chars[Math.floor(Math.random() * EncryptedText.chars.length)];
+
+  static {
+    let rand = () => {
+      setTimeout(() => {
+        let els =
+          Array.from(document.querySelectorAll("encrypted-text"))
+            .filter(e => e.hasAttribute("hover"))
+        let i = Math.floor(Math.random() * els.length);
+        (els[i] as EncryptedText).animate_text(400)
+        rand()
+      }, (Math.random() * 2000) + 2000)
+    }
+    rand()
+  }
 
   @attribute("mount")
   get run_on_mount() {
@@ -86,6 +100,7 @@ export class EncryptedText extends Component {
       this.animate_text(500)
     }
   }
+
 
 }
 EncryptedText.define_self("encrypted-text");

@@ -1,0 +1,3 @@
+global.css > /__immutable/css-QUOU7OTX.css
+pages:home.css > /__immutable/css-XEB3KZBI.css
+main.js > /__immutable/js-GEQFCNL2.js

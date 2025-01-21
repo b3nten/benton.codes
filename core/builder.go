@@ -26,8 +26,6 @@ func AssetMiddleware(app *App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		path := chi.URLParam(r, "*")
 
-		fmt.Println("Serving asset", path)
-
 		// only serve cached assets in production
 		// as assets indicate entries and not build artifacts
 		if app.Mode == ModeProd && cache.Has(path) {
@@ -121,7 +119,6 @@ func BuildAsset(w http.ResponseWriter, asset Asset, cache *Cache[CachedAsset], p
 		} else {
 			p = strings.Replace(file.Path, workDir+"/_assets/", "", 1)
 		}
-		fmt.Println("Caching", p)
 		cache.Set(p, CachedAsset{
 			Content:  file.Contents,
 			MimeType: mimeFromName(p),

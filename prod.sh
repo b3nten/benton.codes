@@ -1,0 +1,1 @@
+go run core/cmd/build.go && go run *.go --mode=production

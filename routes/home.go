@@ -3,6 +3,7 @@ package routes
 import (
 	"benton.codes/core"
 	. "benton.codes/templates"
+	"benton.codes/www/posts"
 	. "maragu.dev/gomponents"
 	. "maragu.dev/gomponents/html"
 )
@@ -29,24 +30,182 @@ func HomePage(app *core.App) Node {
 		),
 		Main(
 			Class("home"),
-			Waypoints(),
+			waypoints(false),
 			Spacer("0", "3rem"),
-			homeContent(),
+			Div(
+				Class("home_content"),
+				Section(
+					Class("home_section_container"),
+					H2(
+						Text("Projects"),
+						Class("home_section_title"),
+					),
+					Ul(
+						Class("home_section_list"),
+						Li(
+							A(
+								EncryptedText("elysia", "hover", "mount"),
+								Href("/p/elysia"),
+							),
+						),
+						Li(
+							A(
+								EncryptedText("blackberry.js", "hover", "mount"),
+								Href("/p/blackberry.js"),
+							),
+						),
+					),
+				),
+				Section(
+					Class("home_section_container"),
+					H2(
+						Text("Work"),
+						Class("home_section_title"),
+					),
+					Ul(
+						Class("home_section_list"),
+						Li(
+							A(
+								EncryptedText("call of duty", "hover", "mount"),
+								Href("/p/call-of-duty"),
+							),
+						),
+						Li(
+							A(
+								EncryptedText("house of the dragon", "hover", "mount"),
+								Href("/p/house-of-the-dragon"),
+							),
+						),
+						Li(
+							A(
+								EncryptedText("chefs table", "hover", "mount"),
+								Href("/p/chefs-table"),
+							),
+						),
+						Li(
+							A(
+								EncryptedText("industry music", "hover", "mount"),
+								Href("/p/industry-music"),
+							),
+						),
+						Li(
+							A(
+								EncryptedText("droplab.com", "hover", "mount"),
+								Href("/p/droplab.com"),
+							),
+						),
+					),
+				),
+				Section(
+					Class("home_section_container"),
+					H2(
+						Text("Experiments"),
+						Class("home_section_title"),
+					),
+					Ul(
+						Class("home_section_list"),
+						Li(
+							A(
+								EncryptedText("lua templating with go", "hover", "mount"),
+								Href("/p/lua-templating-with-go"),
+							),
+						),
+						Li(
+							A(
+								EncryptedText("immediate mode web components", "hover", "mount"),
+								Href("/p/immediate-mode-web-components"),
+							),
+						),
+						Li(
+							A(
+								EncryptedText("lua for application configuration", "hover", "mount"),
+								Href("/p/lua-for-application-configuration"),
+							),
+						),
+					),
+				),
+				Section(
+					Class("home_section_container"),
+					H2(
+						Text("Blog"),
+						Class("home_section_title"),
+					),
+					Ul(
+						Class("home_section_list"),
+						Li(
+							A(
+								EncryptedText("building a web build pipeline with go & lua", "hover", "mount"),
+								Href("/p/building-a-web-build-pipeline-with-go-and-lua"),
+							),
+						),
+						Li(
+							A(
+								EncryptedText("introducing blackberry.js", "hover", "mount"),
+								Href("/p/introducing-blackberry.js"),
+							),
+						),
+					),
+				),
+			),
 		),
 	}
 
 	return Shell(app, "Home", *head, *body)
 }
 
-func Waypoints() Node {
+func PostPage(app *core.App, post posts.Post) []Node {
+	body := []Node{
+		waypoints(true),
+		Spacer("0", "3rem"),
+		Article(
+			El("animate-children",
+				Attr(
+					"id",
+					"post",
+				),
+				Attr("on-mounted", `
+					animate("#post > *",
+					{
+						y: ["-50%", 0],
+						opacity: [0, 1]
+					},
+					{
+						duration: .4,
+						delay: stagger(.05, { startDelay: .5, easing: "easeIn" }),
+						easing: "easeIn"
+					})
+				`),
+				Raw(post.Content),
+			),
+		),
+	}
+	return body
+}
+
+func waypoints(showHome bool) Node {
+	var homelink Node
+
+	if showHome {
+		homelink = Li(
+			A(
+				EncryptedText("Home, ", "hover", "mount"),
+				Class("waypoint_link bold"),
+				Href("/"),
+			),
+		)
+	} else {
+		homelink = Raw("")
+	}
+
 	return Div(
 		Class("waypoint_root"),
 		H2(
-			Text("Waypoints:"),
+			Text("waypoints:"),
 			Class("waypoint_title"),
 		),
 		Ul(
 			Class("waypoint_list"),
+			homelink,
 			Li(
 				A(
 					EncryptedText("github, ", "hover", "mount"),
@@ -75,120 +234,29 @@ func Waypoints() Node {
 	)
 }
 
-func homeContent() Node {
-	return Div(
-		Class("home_content"),
-		Div(
-			Class("home_section_container"),
-			H2(
-				Text("Projects"),
-				Class("home_section_title"),
+func NotFound(app *core.App) Node {
+	return Shell(
+		app,
+		"404 Not Found",
+		[]Node{
+			Meta(
+				Type("description"),
+				Content("404 Not Found"),
 			),
-			Ul(
-				Class("home_section_list"),
-				Li(
-					A(
-						EncryptedText("elysia", "hover", "mount"),
-						Href("/p/elysia"),
-					),
-				),
-				Li(
-					A(
-						EncryptedText("vono", "hover", "mount"),
-						Href("/p/vono"),
-					),
-				),
-				Li(
-					A(
-						EncryptedText("blackberry", "hover", "mount"),
-						Href("/p/blackberry"),
-					),
-				),
+			Link(
+				Rel("stylesheet"),
+				Href(app.GetAssetPath("pages:home.css")),
 			),
-		),
-		Div(
-			Class("home_section_container"),
-			H2(
-				Text("Work"),
-				Class("home_section_title"),
+		},
+		[]Node{
+			Header(
+				EncryptedText(
+					"404 Not Found. The page you are looking for does not exist.",
+					"mount",
+				),
+				Class("home_header cursor-default"),
 			),
-			Ul(
-				Class("home_section_list"),
-				Li(
-					A(
-						EncryptedText("call of duty", "hover", "mount"),
-						Href(""),
-					),
-				),
-				Li(
-					A(
-						EncryptedText("house of the dragon", "hover", "mount"),
-						Href(""),
-					),
-				),
-				Li(
-					A(
-						EncryptedText("chefs table", "hover", "mount"),
-						Href(""),
-					),
-				),
-				Li(
-					A(
-						EncryptedText("droplab.com", "hover", "mount"),
-						Href(""),
-					),
-				),
-			),
-		),
-		Div(
-			Class("home_section_container"),
-			H2(
-				Text("Experiments"),
-				Class("home_section_title"),
-			),
-			Ul(
-				Class("home_section_list"),
-				Li(
-					A(
-						EncryptedText("lua templating with redbean", "hover", "mount"),
-						Href(""),
-					),
-				),
-				Li(
-					A(
-						EncryptedText("immediate mode web components", "hover", "mount"),
-						Href(""),
-					),
-				),
-			),
-		),
-		Div(
-			Class("home_section_container"),
-			H2(
-				Text("Blog"),
-				Class("home_section_title"),
-			),
-			Ul(
-				Class("home_section_list"),
-				Li(
-					A(
-						EncryptedText("loving results instead of tools", "hover", "mount"),
-						Href(""),
-					),
-				),
-				Li(
-					A(
-						EncryptedText("beginners guide to elysia", "hover", "mount"),
-						Href(""),
-					),
-				),
-				Li(
-					A(
-						EncryptedText("i love html", "hover", "mount"),
-						Href(""),
-					),
-				),
-			),
-		),
+			waypoints(true),
+		},
 	)
 }

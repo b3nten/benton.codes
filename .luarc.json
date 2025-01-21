@@ -1,11 +1,6 @@
 {
-    "diagnostics.globals": [
-        "js",
-        "css",
-        "app",
-        "lua"
-    ],
     "diagnostics.disable": [
-        "lowercase-global"
+        "lowercase-global",
+        "undefined-global"
     ]
 }

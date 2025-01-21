@@ -48,30 +48,40 @@ func EncryptedText(e string, args ...string) Node {
 }
 
 func Shell(app *core.App, title string, head []Node, children []Node) Node {
-	return HTML5(HTML5Props{
-		Title:    title,
-		Language: "en",
-		Head: append([]Node{
-			StyleEl(
-				Raw(`body {transition: opacity .25s .3s;} [blackberry-cloak] {opacity: 0;}`),
+	return HTML5(
+		HTML5Props{
+			Title:    title,
+			Language: "en",
+			Head: append(
+				[]Node{
+					StyleEl(
+						Raw(`body {transition: opacity .25s .3s;} [blackberry-cloak] {opacity: 0;}`),
+					),
+					Link(
+						Rel("icon"),
+						Type("image/x-icon"),
+						Href("/static/favicon.png"),
+					),
+					Link(
+						Rel("stylesheet"),
+						Href(app.GetAssetPath("global.css")),
+					),
+					Script(
+						Type("module"),
+						Defer(),
+						Src(app.GetAssetPath("main.js")),
+					),
+				}, head...,
 			),
-			Link(
-				Rel("icon"),
-				Type("image/x-icon"),
-				Href("/static/favicon.png"),
+			Body: append(
+				[]Node{
+					Attr("blackberry-cloak"),
+					Div(
+						ID("window-container"),
+						Style(`position: relative; z-index: 999;`),
+					),
+				}, children...,
 			),
-			Link(
-				Rel("stylesheet"),
-				Href(app.GetAssetPath("global.css")),
-			),
-			Script(
-				Type("module"),
-				Defer(),
-				Src(app.GetAssetPath("main.js")),
-			),
-		}, head...),
-		Body: append([]Node{
-			Attr("blackberry-cloak"),
-		}, children...),
-	})
+		},
+	)
 }

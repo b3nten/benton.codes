@@ -1,12 +1,15 @@
 package server
 
 import (
-	"benton.codes/templates"
-	"maragu.dev/gomponents"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"benton.codes/templates"
+	"benton.codes/www/posts"
+	. "maragu.dev/gomponents"
+	. "maragu.dev/gomponents/html"
 
 	"benton.codes/core"
 	"benton.codes/routes"
@@ -15,12 +18,67 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
+type PostData struct {
+	Title string
+	Header string
+	Description string
+	Content string
+}
+
 // All your routing usually happens here
 func registerRoutes(app *core.App, r *chi.Mux) {
 	registerLuaRoutes(app, r)
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		routes.HomePage(app).Render(w)
+	})
+
+	r.Get("/p/*", func(w http.ResponseWriter, r *http.Request) {
+		fragment := r.Header.Get("X-Fragment") == "true"
+		path := chi.URLParam(r, "*")
+
+		post, err := posts.FS.Get(path)
+
+		if err != nil {
+			w.WriteHeader(404)
+			routes.NotFound(app).Render(w)
+			return
+		}
+
+		if fragment {
+			Div(routes.PostPage(app, post)...).Render(w)
+		} else {
+			body := []Node{
+				Header(
+					templates.EncryptedText(
+						post.Header,
+						"mount",
+					),
+					Class("home_header cursor-default"),
+				),
+			}
+			body = append(body, routes.PostPage(app, post)...)
+			templates.Shell(
+				app,
+				post.Title,
+				[]Node{
+					Link(
+						Rel("stylesheet"),
+						Href(app.GetAssetPath("pages:home.css")),
+					),
+					Meta(
+						Name("description"),
+						Content(post.Description),
+					),
+				},
+				body,
+			).Render(w)
+		}
+	})
+
+	r.NotFound(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(404)
+		routes.NotFound(app).Render(w)
 	})
 }
 
@@ -35,27 +93,29 @@ func registerMiddleware(app *core.App, r *chi.Mux) {
 
 func registerLuaRoutes(app *core.App, r *chi.Mux) {
 	for _, route := range app.Routes {
-		r.Get(route.Path, func(w http.ResponseWriter, r *http.Request) {
-			res := core.ServeLuaTemplate(route.Handler, core.LuaTable{})
+		r.Get(
+			route.Path, func(w http.ResponseWriter, r *http.Request) {
+				res := core.ServeLuaTemplate(route.Handler, core.LuaTable{})
 
-			w.WriteHeader(res.Status)
+				w.WriteHeader(res.Status)
 
-			for key, value := range res.Headers {
-				w.Header().Set(key, value)
-			}
+				for key, value := range res.Headers {
+					w.Header().Set(key, value)
+				}
 
-			if res.Shell {
-				templates.Shell(
-					app,
-					res.Title,
-					[]gomponents.Node{gomponents.Raw(res.Head)},
-					[]gomponents.Node{gomponents.Raw(res.Body)},
-				).Render(w)
-				return
-			}
+				if res.Shell {
+					templates.Shell(
+						app,
+						res.Title,
+						[]Node{Raw(res.Head)},
+						[]Node{Raw(res.Body)},
+					).Render(w)
+					return
+				}
 
-			w.Write([]byte(res.Body))
-		})
+				w.Write([]byte(res.Body))
+			},
+		)
 	}
 }
 
@@ -102,10 +162,12 @@ func fileServer(r chi.Router, path string, root http.FileSystem) {
 	}
 	path += "*"
 
-	r.Get(path, func(w http.ResponseWriter, r *http.Request) {
-		rctx := chi.RouteContext(r.Context())
-		pathPrefix := strings.TrimSuffix(rctx.RoutePattern(), "/*")
-		fs := http.StripPrefix(pathPrefix, http.FileServer(root))
-		fs.ServeHTTP(w, r)
-	})
+	r.Get(
+		path, func(w http.ResponseWriter, r *http.Request) {
+			rctx := chi.RouteContext(r.Context())
+			pathPrefix := strings.TrimSuffix(rctx.RoutePattern(), "/*")
+			fs := http.StripPrefix(pathPrefix, http.FileServer(root))
+			fs.ServeHTTP(w, r)
+		},
+	)
 }

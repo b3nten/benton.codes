@@ -64,7 +64,6 @@ func (app *App) GetAsset(nameOrSrc string) (Asset, bool) {
 
 func (app *App) GetAssetPath(nameOrSrc string) string {
 	asset, ok := app.GetAsset(nameOrSrc)
-	fmt.Println(asset)
 	if !ok {
 		return ""
 	}
