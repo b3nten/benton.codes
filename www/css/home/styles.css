@@ -93,6 +93,11 @@ body {
     margin: 0 0 2rem;
     max-width: 1024px;
     cursor: default;
+
+    &.window {
+        font-size: 2rem;
+        max-width: 768px;
+    }
 }
 .home_section_container {
     margin-bottom: 1.5rem;

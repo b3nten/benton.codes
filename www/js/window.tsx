@@ -131,6 +131,7 @@ export class Window extends Component {
       position: fixed;
       top: 0px;
       left: 0px;
+      overflow: hidden;
     }
 
     #title-bar {
@@ -443,4 +444,3 @@ export class Window extends Component {
 }
 
 Window.define_self("window-element")
-

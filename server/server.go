@@ -46,7 +46,20 @@ func registerRoutes(app *core.App, r *chi.Mux) {
 		}
 
 		if fragment {
-			Div(routes.PostPage(app, post)...).Render(w)
+			body := []Node{
+				Div(
+					Header(
+						Text(
+							post.Header,
+						),
+						Class("home_header cursor-default window"),
+					),
+				),
+			}
+
+			body = append(body, routes.PostPage(app, post)...)
+			Div(body...).Render(w)
+
 		} else {
 			body := []Node{
 				Header(
@@ -57,6 +70,8 @@ func registerRoutes(app *core.App, r *chi.Mux) {
 					Class("home_header cursor-default"),
 				),
 			}
+			body = append(body, routes.Waypoints(true))
+			body = append(body, templates.Spacer("0", "3rem"))
 			body = append(body, routes.PostPage(app, post)...)
 			templates.Shell(
 				app,

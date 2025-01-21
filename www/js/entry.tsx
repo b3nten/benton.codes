@@ -1,7 +1,7 @@
 import init_blackberry, { Ivysaur } from "blackberry.js";
 import "./encrypted_text.tsx"
 import "./window.tsx"
-import "./a-window.ts"
+import "./a-window.tsx"
 
 import { animate, stagger } from "motion";
 

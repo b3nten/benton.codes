@@ -8,6 +8,10 @@ import (
 	. "maragu.dev/gomponents/html"
 )
 
+func aWindow(children ...Node) Node {
+	return El("a-window", A(children...))
+}
+
 func HomePage(app *core.App) Node {
 	head := &[]Node{
 		Meta(
@@ -30,7 +34,7 @@ func HomePage(app *core.App) Node {
 		),
 		Main(
 			Class("home"),
-			waypoints(false),
+			Waypoints(false),
 			Spacer("0", "3rem"),
 			Div(
 				Class("home_content"),
@@ -43,7 +47,7 @@ func HomePage(app *core.App) Node {
 					Ul(
 						Class("home_section_list"),
 						Li(
-							A(
+							aWindow(
 								EncryptedText("elysia", "hover", "mount"),
 								Href("/p/elysia"),
 							),
@@ -155,8 +159,6 @@ func HomePage(app *core.App) Node {
 
 func PostPage(app *core.App, post posts.Post) []Node {
 	body := []Node{
-		waypoints(true),
-		Spacer("0", "3rem"),
 		Article(
 			El("animate-children",
 				Attr(
@@ -182,7 +184,7 @@ func PostPage(app *core.App, post posts.Post) []Node {
 	return body
 }
 
-func waypoints(showHome bool) Node {
+func Waypoints(showHome bool) Node {
 	var homelink Node
 
 	if showHome {
@@ -256,7 +258,7 @@ func NotFound(app *core.App) Node {
 				),
 				Class("home_header cursor-default"),
 			),
-			waypoints(true),
+			Waypoints(true),
 		},
 	)
 }
