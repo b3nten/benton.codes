@@ -35,7 +35,7 @@ Desktop.ini
 *.swo
 
 #Node
-node_modules/
+#node_modules/
 npm-debug.log
 
 #__immutable
