@@ -18,7 +18,7 @@ go.work.sum
 .env
 
 # IDE
-.idea/
+#.idea/
 .vscode/
 
 # Mac
@@ -38,4 +38,4 @@ Desktop.ini
 node_modules/
 npm-debug.log
 
-__immutable
+#__immutable
