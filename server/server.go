@@ -1,6 +1,7 @@
 package server
 
 import (
+	"io"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -38,6 +39,30 @@ func registerRoutes(app *core.App, r *chi.Mux) {
 			fragment := r.Header.Get("X-Fragment") == "true"
 			path := chi.URLParam(r, "*")
 			routes.HomePostPage(app, w, path, fragment)
+		},
+	)
+
+	r.Get(
+		"/blackberry.js", func(w http.ResponseWriter, r *http.Request) {
+
+			frag := r.Header.Get("X-Fragment") == "true"
+
+			if(frag) {
+				w.WriteHeader(200)
+				w.Write([]byte("<iframe src='/blackberry.js' style='width: 100%; height: 100%; border: none;'></iframe>"))
+				return
+			}
+
+			file, err := os.Open("www/pages/blackberry.html")
+			if err != nil {
+				w.WriteHeader(404)
+				w.Write([]byte("404 - Not Found"))
+				return
+			}
+
+			w.WriteHeader(200)
+			bytes, _ := io.ReadAll(file)
+			w.Write(bytes)
 		},
 	)
 

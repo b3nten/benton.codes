@@ -9,7 +9,6 @@ import (
 	"net/http"
 )
 
-
 func HomePage(app *core.App) Node {
 	head := &[]Node{
 		Meta(
@@ -50,7 +49,7 @@ func HomePage(app *core.App) Node {
 							homeWindow(
 								"blackberry.js",
 								templates.EncryptedText("blackberry.js", "hover", "mount"),
-								Href("/p/blackberry"),
+								Href("/blackberry.js"),
 							),
 						),
 					),
