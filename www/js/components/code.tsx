@@ -9,13 +9,13 @@ export class CodeBlock extends Ivysaur {
       position: relative;
       overflow: hidden;
       border-radius: 10px;
-      border: 1px solid grey !important;
+      border: 1px solid color-mix(in srgb, var(--text-color), transparent 90%) !important;
     }
 
     pre {
       display: block;
       margin: 0;
-      padding: 0.25rem;
+      padding: 0.5rem;
       overflow: scroll;
       height: 100%;
       max-height: 100%;
@@ -23,8 +23,8 @@ export class CodeBlock extends Ivysaur {
     }
 
     #title {
-      padding: 0.25rem;
-      border-bottom: 1px solid grey;
+      padding: 0.5rem;
+      border-bottom: 1px solid color-mix(in srgb, var(--text-color), transparent 90%);
       display: flex;
       justify-content: space-between;
       align-items: center;
