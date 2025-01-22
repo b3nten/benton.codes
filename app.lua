@@ -4,6 +4,12 @@ js_main = js {
     minify = is_prod,
 }
 
+js_home = js {
+    name = "home.js",
+    src = "www/js/home.tsx",
+    minify = is_prod,
+}
+
 global_css = css {
     name = "global.css",
     src = "www/css/global.css",
@@ -11,19 +17,21 @@ global_css = css {
 }
 
 home_css = css {
-    name = "pages:home.css",
-    src = "www/css/home/styles.css",
+    name = "home.css",
+    src = "www/css/home.css",
     minify = is_prod,
 }
 
 app {
     name = "benton.codes",
-    port = 8000,
+    port = 8001,
     static_dir = "www/static/",
     assets = {
-        js_main,
         global_css,
         home_css,
+
+        js_main,
+        js_home
     },
     routes = {
         { path = "/about", handler = "routes/about.lua" }

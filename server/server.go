@@ -7,9 +7,7 @@ import (
 	"strings"
 
 	"benton.codes/templates"
-	"benton.codes/www/posts"
 	. "maragu.dev/gomponents"
-	. "maragu.dev/gomponents/html"
 
 	"benton.codes/core"
 	"benton.codes/routes"
@@ -19,82 +17,36 @@ import (
 )
 
 type PostData struct {
-	Title string
-	Header string
+	Title       string
+	Header      string
 	Description string
-	Content string
+	Content     string
 }
 
 // All your routing usually happens here
 func registerRoutes(app *core.App, r *chi.Mux) {
 	registerLuaRoutes(app, r)
 
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		routes.HomePage(app).Render(w)
-	})
+	r.Get(
+		"/", func(w http.ResponseWriter, r *http.Request) {
+			routes.HomePage(app).Render(w)
+		},
+	)
 
-	r.Get("/p/*", func(w http.ResponseWriter, r *http.Request) {
-		fragment := r.Header.Get("X-Fragment") == "true"
-		path := chi.URLParam(r, "*")
+	r.Get(
+		"/p/*", func(w http.ResponseWriter, r *http.Request) {
+			fragment := r.Header.Get("X-Fragment") == "true"
+			path := chi.URLParam(r, "*")
+			routes.HomePostPage(app, w, path, fragment)
+		},
+	)
 
-		post, err := posts.FS.Get(path)
-
-		if err != nil {
+	r.NotFound(
+		func(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(404)
-			routes.NotFound(app).Render(w)
-			return
-		}
-
-		if fragment {
-			body := []Node{
-				Div(
-					Header(
-						Text(
-							post.Header,
-						),
-						Class("home_header cursor-default window"),
-					),
-				),
-			}
-
-			body = append(body, routes.PostPage(app, post)...)
-			Div(body...).Render(w)
-
-		} else {
-			body := []Node{
-				Header(
-					templates.EncryptedText(
-						post.Header,
-						"mount",
-					),
-					Class("home_header cursor-default"),
-				),
-			}
-			body = append(body, routes.Waypoints(true))
-			body = append(body, templates.Spacer("0", "3rem"))
-			body = append(body, routes.PostPage(app, post)...)
-			templates.Shell(
-				app,
-				post.Title,
-				[]Node{
-					Link(
-						Rel("stylesheet"),
-						Href(app.GetAssetPath("pages:home.css")),
-					),
-					Meta(
-						Name("description"),
-						Content(post.Description),
-					),
-				},
-				body,
-			).Render(w)
-		}
-	})
-
-	r.NotFound(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(404)
-		routes.NotFound(app).Render(w)
-	})
+			routes.HomeNotFound(app).Render(w)
+		},
+	)
 }
 
 func registerMiddleware(app *core.App, r *chi.Mux) {

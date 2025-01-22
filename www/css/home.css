@@ -35,8 +35,11 @@
 }
 
 body {
-    background:  whitesmoke;
-    color: #1a1a1a;
+    --bg-color: whitesmoke;
+    --text-color: #1a1a1a;
+
+    background:  var(--bg-color);
+    color: var(--text-color);
     font-family: "OverpassMono",monospace;
     font-weight: 200;
     font-size: 1.2rem;
@@ -45,8 +48,11 @@ body {
 
 @media (prefers-color-scheme: dark) {
     body {
-        background: #0c0c0c;
-        color: whitesmoke;
+        --bg-color: #0c0c0c;
+        --text-color: whitesmoke;
+
+        background: var(--bg-color);
+        color: var(--text-color);
     }
 }
 
@@ -133,5 +139,14 @@ body {
             text-decoration: none;
             transition: color .2s;
         }
+    }
+}
+
+#post {
+
+    >p {
+        line-height: 125%;
+        font-weight: 350;
+        margin-bottom: 2rem;
     }
 }

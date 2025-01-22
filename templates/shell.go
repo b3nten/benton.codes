@@ -7,26 +7,6 @@ import (
 	. "maragu.dev/gomponents/html"
 )
 
-func Template(children ...Node) Node {
-	return El("template", children...)
-}
-
-func Slot(children ...Node) Node {
-	return El("slot", children...)
-}
-
-func ClickAttr(e string) Node {
-	return Attr("@click", e)
-}
-
-func TextAttr(e string) Node {
-	return Attr(":text", e)
-}
-
-func RawStyle(e string) Node {
-	return El("style", Raw(e))
-}
-
 func Spacer(x, y string) Node {
 	return Div(
 		Attr("style", "padding-left: "+x+"; padding-top: "+y+";"),

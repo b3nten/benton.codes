@@ -1,12 +1,14 @@
-import { Ivysaur, css, h, Fragment} from "blackberry.js";
-import "./window.js"
+import {Ivysaur, css, h, Fragment, attribute, state} from "blackberry.js";
+import "./components/window.js"
 
-export class AWindow extends Ivysaur {
+export class HomeLinkToWindow extends Ivysaur {
   static light_dom = true;
 
   link_element?: HTMLAnchorElement;
 
-  window_element?: HTMLElement;
+  @attribute("window-title") get title() {
+    return "window"
+  }
 
   @attribute("min-window-size") get min_size() {
     return 768
@@ -16,6 +18,7 @@ export class AWindow extends Ivysaur {
 
   on_mount = () => {
     this.link_element = this.querySelector("a")
+    this.link_element?.addEventListener("mousedown", this.on_mouse_down)
     this.link_element?.addEventListener("click", this.on_click)
     this.contentPromise = this.fetch_content(this.link_element?.href!);
   }
@@ -30,8 +33,11 @@ export class AWindow extends Ivysaur {
     return text;
   }
 
-  on_click = (e: MouseEvent) => {
-    if (window.innerWidth < this.min_size) {
+  on_mouse_down = (e: MouseEvent) => {
+    if (
+        window.innerWidth < this.min_size
+    || "ontouchstart" in window
+    ) {
       return;
     }
 
@@ -39,23 +45,16 @@ export class AWindow extends Ivysaur {
     let container = document.getElementById("window-container");
     let window_el = document.createElement("window-element");
 
-    let title_e = document.createElement("a-window-title");
-    title_e.title = this.link_element?.innerText!;
-    (title_e as AWindowTitle).link = this.link_element?.href!;
-
-    let content_e = document.createElement("div");
-    content_e.style.borderRight = "1px solid white";
-    content_e.style.borderLeft = "1px solid white";
-    content_e.style.borderBottom = "1px solid white";
-    content_e.style.backgroundColor = "#0c0c0c";
-    content_e.style.borderRadius = "0 0 8px 8px";
-    content_e.style.width = "100%";
-    content_e.style.height = "100%";
-    content_e.slot = "content";
+    let title_e = document.createElement("home-window-title");
+    title_e.title = this.title;
+    (title_e as HomeWindowTitle).link = this.link_element?.href!;
 
     window_el.appendChild(title_e);
-    window_el.appendChild(content_e);
-    window_el.setAttribute("window-width", "700px")
+
+    window_el.appendChild(document.createElement("home-window-content"));
+
+    window_el.setAttribute("window-width", "760")
+    window_el.setAttribute("window-height", "480")
 
     container?.appendChild(window_el);
 
@@ -64,31 +63,75 @@ export class AWindow extends Ivysaur {
     })
   }
 
+  on_click = (e: MouseEvent) => {
+    if (
+        window.innerWidth > this.min_size
+    && !("ontouchstart" in window)
+    ) {
+      e.preventDefault();
+    }
+  }
+
   on_unmount = () => {
+    this.link_element?.removeEventListener("mousedown", this.on_mouse_down)
     this.link_element?.removeEventListener("click", this.on_click)
   }
 }
 
-AWindow.define_self("a-window")
+HomeLinkToWindow.define_self("home-window-link")
 
+export class HomeWindowContent extends Ivysaur {
 
-export class AWindowTitle extends Ivysaur {
+    static styles = css`
+      :host {
+        display: block;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        overflow: scroll;
+        filter: var(--focused, brightness(100%)) var(--unfocused, brightness(60%) saturate(50%));
+        border-right: 1px solid #888 !important;
+        border-left: 1px solid #888 !important;
+        border-bottom: 1px solid #888 !important;
+        border-radius: 0 0 8px 8px;
+        overflow: scroll;
+      }
+
+      :slotted(*) {
+          opacity: var(--focused, 1) var(--unfocused, .5);
+      }
+    `
+
+    render() {
+      return (
+        <host slot="content">
+          <slot></slot>
+        </host>
+      )
+    }
+}
+
+HomeWindowContent.define_self("home-window-content")
+
+export class HomeWindowTitle extends Ivysaur {
   static styles = css`
       :host {
-        border: 1px solid white !important;
-        background-color: #0c0c0c;
-        padding: 2px;
+        border: 1px solid #888 !important;
+        background-color: black/70%
         height: 32px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         border-radius: 8px 8px 0 0;
+        backdrop-filter: blur(20px);
+        filter: var(--focused, brightness(100%)) var(--unfocused, brightness(50%));
       }
 
       .title-container {
-          display: flex;
-            justify-content: center;
-            align-items: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 2px 6px;
       }
 
       .link-btn {
@@ -105,16 +148,18 @@ export class AWindowTitle extends Ivysaur {
       .close-btn {
         color: white;
         padding: 4px;
-        margin: 4px;
+        margin: 0 8px;
         cursor: pointer;
         width: 24px;
         height: 24px;
         border: 0px solid transparent;
         font-weight: bold;
+        font-size: 1em;
         display: flex;
         justify-content: center;
         align-items: center;
         background-color: transparent;
+        line-height: 0;
       }
     `
 
@@ -149,11 +194,11 @@ export class AWindowTitle extends Ivysaur {
             e.stopPropagation();
           }}
         >
-          x
+          ⓧ
         </button>
       </host>
     )
   }
 }
 
-AWindowTitle.define_self("a-window-title")
+HomeWindowTitle.define_self("home-window-title")

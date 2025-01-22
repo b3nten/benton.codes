@@ -2,14 +2,37 @@ package routes
 
 import (
 	"benton.codes/core"
-	. "benton.codes/templates"
+	"benton.codes/templates"
 	"benton.codes/www/posts"
 	. "maragu.dev/gomponents"
 	. "maragu.dev/gomponents/html"
+	"net/http"
 )
 
-func aWindow(children ...Node) Node {
-	return El("a-window", A(children...))
+func HomeShell(app *core.App, title string, head []Node, children []Node) Node {
+	return templates.Shell(
+		app,
+		title,
+		append(
+			[]Node{
+				Link(
+					Rel("stylesheet"),
+					Href(app.GetAssetPath("home.css")),
+				),
+				Script(
+					Type("module"),
+					Src(app.GetAssetPath("home.js")),
+					Defer(),
+				),
+			}, head...,
+		),
+		children,
+	)
+
+}
+
+func HomeWindow(title string, children ...Node) Node {
+	return El("home-window-link", Attr("window-title", title), A(children...))
 }
 
 func HomePage(app *core.App) Node {
@@ -18,15 +41,10 @@ func HomePage(app *core.App) Node {
 			Type("description"),
 			Content("My website where stuff is."),
 		),
-		Link(
-			Rel("stylesheet"),
-			Href(app.GetAssetPath("pages:home.css")),
-		),
 	}
-
 	body := &[]Node{
 		Header(
-			EncryptedText(
+			templates.EncryptedText(
 				"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 				"mount",
 			),
@@ -35,7 +53,7 @@ func HomePage(app *core.App) Node {
 		Main(
 			Class("home"),
 			Waypoints(false),
-			Spacer("0", "3rem"),
+			templates.Spacer("0", "3rem"),
 			Div(
 				Class("home_content"),
 				Section(
@@ -47,14 +65,15 @@ func HomePage(app *core.App) Node {
 					Ul(
 						Class("home_section_list"),
 						Li(
-							aWindow(
-								EncryptedText("elysia", "hover", "mount"),
+							HomeWindow(
+								"elysia",
+								templates.EncryptedText("elysia", "hover", "mount"),
 								Href("/p/elysia"),
 							),
 						),
 						Li(
 							A(
-								EncryptedText("blackberry.js", "hover", "mount"),
+								templates.EncryptedText("blackberry.js", "hover", "mount"),
 								Href("/p/blackberry.js"),
 							),
 						),
@@ -70,31 +89,31 @@ func HomePage(app *core.App) Node {
 						Class("home_section_list"),
 						Li(
 							A(
-								EncryptedText("call of duty", "hover", "mount"),
+								templates.EncryptedText("call of duty", "hover", "mount"),
 								Href("/p/call-of-duty"),
 							),
 						),
 						Li(
 							A(
-								EncryptedText("house of the dragon", "hover", "mount"),
+								templates.EncryptedText("house of the dragon", "hover", "mount"),
 								Href("/p/house-of-the-dragon"),
 							),
 						),
 						Li(
 							A(
-								EncryptedText("chefs table", "hover", "mount"),
+								templates.EncryptedText("chefs table", "hover", "mount"),
 								Href("/p/chefs-table"),
 							),
 						),
 						Li(
 							A(
-								EncryptedText("industry music", "hover", "mount"),
+								templates.EncryptedText("industry music", "hover", "mount"),
 								Href("/p/industry-music"),
 							),
 						),
 						Li(
 							A(
-								EncryptedText("droplab.com", "hover", "mount"),
+								templates.EncryptedText("droplab.com", "hover", "mount"),
 								Href("/p/droplab.com"),
 							),
 						),
@@ -110,19 +129,19 @@ func HomePage(app *core.App) Node {
 						Class("home_section_list"),
 						Li(
 							A(
-								EncryptedText("lua templating with go", "hover", "mount"),
+								templates.EncryptedText("lua templating with go", "hover", "mount"),
 								Href("/p/lua-templating-with-go"),
 							),
 						),
 						Li(
 							A(
-								EncryptedText("immediate mode web components", "hover", "mount"),
+								templates.EncryptedText("immediate mode web components", "hover", "mount"),
 								Href("/p/immediate-mode-web-components"),
 							),
 						),
 						Li(
 							A(
-								EncryptedText("lua for application configuration", "hover", "mount"),
+								templates.EncryptedText("lua for application configuration", "hover", "mount"),
 								Href("/p/lua-for-application-configuration"),
 							),
 						),
@@ -138,13 +157,15 @@ func HomePage(app *core.App) Node {
 						Class("home_section_list"),
 						Li(
 							A(
-								EncryptedText("building a web build pipeline with go & lua", "hover", "mount"),
+								templates.EncryptedText(
+									"building a web build pipeline with go & lua", "hover", "mount",
+								),
 								Href("/p/building-a-web-build-pipeline-with-go-and-lua"),
 							),
 						),
 						Li(
 							A(
-								EncryptedText("introducing blackberry.js", "hover", "mount"),
+								templates.EncryptedText("introducing blackberry.js", "hover", "mount"),
 								Href("/p/introducing-blackberry.js"),
 							),
 						),
@@ -154,19 +175,24 @@ func HomePage(app *core.App) Node {
 		),
 	}
 
-	return Shell(app, "Home", *head, *body)
+	return HomeShell(app, "Home", *head, *body)
 }
 
-func PostPage(app *core.App, post posts.Post) []Node {
-	body := []Node{
-		Article(
-			El("animate-children",
-				Attr(
-					"id",
-					"post",
-				),
-				Attr("on-mounted", `
-					animate("#post > *",
+func HomePostPage(app *core.App, w http.ResponseWriter, path string, fragment bool) {
+	post, err := posts.FS.Get(path)
+
+	if err != nil {
+		w.WriteHeader(404)
+		HomeNotFound(app).Render(w)
+		return
+	}
+
+	article := Article(
+		El(
+			"animate-children",
+			Attr(
+				"on-mounted", `
+					animate(this.childNodes,
 					{
 						y: ["-50%", 0],
 						opacity: [0, 1]
@@ -176,12 +202,54 @@ func PostPage(app *core.App, post posts.Post) []Node {
 						delay: stagger(.05, { startDelay: .5, easing: "easeIn" }),
 						easing: "easeIn"
 					})
-				`),
-				Raw(post.Content),
+				`,
 			),
+			Raw(post.Content),
 		),
+	)
+
+	var renderable Node
+
+	if fragment {
+		renderable = Div(
+			Class("p04"),
+			Header(
+				templates.EncryptedText(
+					post.Header,
+					"mount",
+					"hover",
+				),
+				Class("home_header cursor-default window"),
+			),
+			article,
+		)
+	} else {
+		renderable = HomeShell(
+			app,
+			post.Title,
+			[]Node{
+				Meta(
+					Type("description"),
+					Content(post.Description),
+				),
+			},
+			[]Node{
+				Header(
+					templates.EncryptedText(
+						post.Header,
+						"mount",
+					),
+					Class("home_header cursor-default"),
+				),
+				Waypoints(true),
+				templates.Spacer("0", "3rem"),
+				article,
+			},
+		)
 	}
-	return body
+
+	renderable.Render(w)
+
 }
 
 func Waypoints(showHome bool) Node {
@@ -190,7 +258,7 @@ func Waypoints(showHome bool) Node {
 	if showHome {
 		homelink = Li(
 			A(
-				EncryptedText("Home, ", "hover", "mount"),
+				templates.EncryptedText("Home, ", "hover", "mount"),
 				Class("waypoint_link bold"),
 				Href("/"),
 			),
@@ -210,7 +278,7 @@ func Waypoints(showHome bool) Node {
 			homelink,
 			Li(
 				A(
-					EncryptedText("github, ", "hover", "mount"),
+					templates.EncryptedText("github, ", "hover", "mount"),
 					Class("waypoint_link"),
 					Href("https://github.com/b3nten"),
 					Target("_blank"),
@@ -218,7 +286,7 @@ func Waypoints(showHome bool) Node {
 			),
 			Li(
 				A(
-					EncryptedText("artstation, ", "hover", "mount"),
+					templates.EncryptedText("artstation, ", "hover", "mount"),
 					Class("waypoint_link"),
 					Href("https://www.artstation.com/benten28"),
 					Target("_blank"),
@@ -226,7 +294,7 @@ func Waypoints(showHome bool) Node {
 			),
 			Li(
 				A(
-					EncryptedText("x.com", "hover", "mount"),
+					templates.EncryptedText("x.com", "hover", "mount"),
 					Class("waypoint_link"),
 					Href("https://x.com/Cohn_Jarmack"),
 					Target("_blank"),
@@ -236,8 +304,8 @@ func Waypoints(showHome bool) Node {
 	)
 }
 
-func NotFound(app *core.App) Node {
-	return Shell(
+func HomeNotFound(app *core.App) Node {
+	return HomeShell(
 		app,
 		"404 Not Found",
 		[]Node{
@@ -245,14 +313,10 @@ func NotFound(app *core.App) Node {
 				Type("description"),
 				Content("404 Not Found"),
 			),
-			Link(
-				Rel("stylesheet"),
-				Href(app.GetAssetPath("pages:home.css")),
-			),
 		},
 		[]Node{
 			Header(
-				EncryptedText(
+				templates.EncryptedText(
 					"404 Not Found. The page you are looking for does not exist.",
 					"mount",
 				),
