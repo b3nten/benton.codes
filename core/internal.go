@@ -18,6 +18,7 @@ const (
 
 func preInit() {
 	mode = (*Mode)(flag.String("mode", "development", "The mode to run in"))
+
 	flag.Parse()
 }
 
@@ -40,16 +41,18 @@ func createAppFromConfig() (*App, *lua.LTable) {
 	L.G.Global.RawSet(lua.LString("runtime_mode"), lua.LString(*mode))
 	L.G.Global.RawSet(lua.LString("is_dev"), lua.LBool(*mode == ModeDev))
 	L.G.Global.RawSet(lua.LString("is_prod"), lua.LBool(*mode == ModeProd))
-	L.SetFuncs(L.G.Global, map[string]lua.LGFunction{
-		"asset": typedTable("asset"),
-		"js":    typedTable("js"),
-		"css":   typedTable("css"),
-		"lua":   typedTable("lua"),
-		"app": func(L *lua.LState) int {
-			L.G.Global.RawSet(lua.LString("app"), L.ToTable(1))
-			return 1
+	L.SetFuncs(
+		L.G.Global, map[string]lua.LGFunction{
+			"asset": typedTable("asset"),
+			"js":    typedTable("js"),
+			"css":   typedTable("css"),
+			"lua":   typedTable("lua"),
+			"app": func(L *lua.LState) int {
+				L.G.Global.RawSet(lua.LString("app"), L.ToTable(1))
+				return 1
+			},
 		},
-	})
+	)
 	defer L.Close()
 	if err := L.DoFile("app.lua"); err != nil {
 		panic(err)
@@ -79,15 +82,17 @@ func createAppFromConfig() (*App, *lua.LTable) {
 
 	if routes := extract[lua.LValue](config, "routes"); routes != lua.LNil {
 		_routes := routes.(*lua.LTable)
-		_routes.ForEach(func(k, v lua.LValue) {
-			if route, ok := v.(*lua.LTable); ok {
-				path := extract[lua.LString](route, "path")
-				handler := extract[lua.LString](route, "handler")
-				if path != "" && handler != "" {
-					app.Routes = append(app.Routes, Route{path.String(), handler.String()})
+		_routes.ForEach(
+			func(k, v lua.LValue) {
+				if route, ok := v.(*lua.LTable); ok {
+					path := extract[lua.LString](route, "path")
+					handler := extract[lua.LString](route, "handler")
+					if path != "" && handler != "" {
+						app.Routes = append(app.Routes, Route{path.String(), handler.String()})
+					}
 				}
-			}
-		})
+			},
+		)
 	}
 
 	return app, config

@@ -9,31 +9,6 @@ import (
 	"net/http"
 )
 
-func HomeShell(app *core.App, title string, head []Node, children []Node) Node {
-	return templates.Shell(
-		app,
-		title,
-		append(
-			[]Node{
-				Link(
-					Rel("stylesheet"),
-					Href(app.GetAssetPath("home.css")),
-				),
-				Script(
-					Type("module"),
-					Src(app.GetAssetPath("home.js")),
-					Defer(),
-				),
-			}, head...,
-		),
-		children,
-	)
-
-}
-
-func HomeWindow(title string, children ...Node) Node {
-	return El("home-window-link", Attr("window-title", title), A(children...))
-}
 
 func HomePage(app *core.App) Node {
 	head := &[]Node{
@@ -52,7 +27,7 @@ func HomePage(app *core.App) Node {
 		),
 		Main(
 			Class("home"),
-			Waypoints(false),
+			waypoints(false),
 			templates.Spacer("0", "3rem"),
 			Div(
 				Class("home_content"),
@@ -65,16 +40,17 @@ func HomePage(app *core.App) Node {
 					Ul(
 						Class("home_section_list"),
 						Li(
-							HomeWindow(
+							homeWindow(
 								"elysia",
 								templates.EncryptedText("elysia", "hover", "mount"),
 								Href("/p/elysia"),
 							),
 						),
 						Li(
-							A(
+							homeWindow(
+								"blackberry.js",
 								templates.EncryptedText("blackberry.js", "hover", "mount"),
-								Href("/p/blackberry.js"),
+								Href("/p/blackberry"),
 							),
 						),
 					),
@@ -175,7 +151,7 @@ func HomePage(app *core.App) Node {
 		),
 	}
 
-	return HomeShell(app, "Home", *head, *body)
+	return homeShell(app, "Home", *head, *body)
 }
 
 func HomePostPage(app *core.App, w http.ResponseWriter, path string, fragment bool) {
@@ -188,6 +164,7 @@ func HomePostPage(app *core.App, w http.ResponseWriter, path string, fragment bo
 	}
 
 	article := Article(
+		Class("home-post"),
 		El(
 			"animate-children",
 			Attr(
@@ -224,7 +201,7 @@ func HomePostPage(app *core.App, w http.ResponseWriter, path string, fragment bo
 			article,
 		)
 	} else {
-		renderable = HomeShell(
+		renderable = homeShell(
 			app,
 			post.Title,
 			[]Node{
@@ -241,7 +218,7 @@ func HomePostPage(app *core.App, w http.ResponseWriter, path string, fragment bo
 					),
 					Class("home_header cursor-default"),
 				),
-				Waypoints(true),
+				waypoints(true),
 				templates.Spacer("0", "3rem"),
 				article,
 			},
@@ -252,7 +229,56 @@ func HomePostPage(app *core.App, w http.ResponseWriter, path string, fragment bo
 
 }
 
-func Waypoints(showHome bool) Node {
+func HomeNotFound(app *core.App) Node {
+	return homeShell(
+		app,
+		"404 Not Found",
+		[]Node{
+			Meta(
+				Type("description"),
+				Content("404 Not Found"),
+			),
+		},
+		[]Node{
+			Header(
+				templates.EncryptedText(
+					"404 Not Found. The page you are looking for does not exist.",
+					"mount",
+				),
+				Class("home_header cursor-default"),
+			),
+			waypoints(true),
+		},
+	)
+}
+
+func homeShell(app *core.App, title string, head []Node, children []Node) Node {
+	return templates.Shell(
+		app,
+		title,
+		append(
+			[]Node{
+				Link(
+					Rel("stylesheet"),
+					Href(app.GetAssetPath("home.css")),
+				),
+				Script(
+					Type("module"),
+					Src(app.GetAssetPath("home.js")),
+					Defer(),
+				),
+			}, head...,
+		),
+		children,
+	)
+
+}
+
+func homeWindow(title string, children ...Node) Node {
+	return El("home-window-link", Attr("window-title", title), A(children...))
+}
+
+func waypoints(showHome bool) Node {
 	var homelink Node
 
 	if showHome {
@@ -301,28 +327,5 @@ func Waypoints(showHome bool) Node {
 				),
 			),
 		),
-	)
-}
-
-func HomeNotFound(app *core.App) Node {
-	return HomeShell(
-		app,
-		"404 Not Found",
-		[]Node{
-			Meta(
-				Type("description"),
-				Content("404 Not Found"),
-			),
-		},
-		[]Node{
-			Header(
-				templates.EncryptedText(
-					"404 Not Found. The page you are looking for does not exist.",
-					"mount",
-				),
-				Class("home_header cursor-default"),
-			),
-			Waypoints(true),
-		},
 	)
 }

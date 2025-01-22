@@ -24,7 +24,7 @@ home_css = css {
 
 app {
     name = "benton.codes",
-    port = 8001,
+    port = 8002,
     static_dir = "www/static/",
     assets = {
         global_css,
@@ -33,7 +33,4 @@ app {
         js_main,
         js_home
     },
-    routes = {
-        { path = "/about", handler = "routes/about.lua" }
-    }
 }

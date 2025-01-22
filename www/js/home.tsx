@@ -1,6 +1,35 @@
 import {Ivysaur, css, h, Fragment, attribute, state} from "blackberry.js";
 import "./components/window.js"
 
+export class HomeWindowButton extends Ivysaur {
+  static light_dom = true;
+
+  @attribute("window-title") get title() {
+    return "window"
+  }
+
+  @attribute("min-window-size") get min_size() {
+    return 768
+  }
+
+  get_content = () => {
+    let button = this.querySelector("button");
+    button?.addEventListener("click", this.on_click);
+  }
+
+  on_unmounted = () => {
+    let button = this.querySelector("button");
+    button?.removeEventListener("click", this.on_click);
+  }
+
+  on_click = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+
+  }
+}
+
 export class HomeLinkToWindow extends Ivysaur {
   static light_dom = true;
 
