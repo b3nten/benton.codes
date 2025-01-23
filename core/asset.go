@@ -93,70 +93,76 @@ func compileAssets(app *App, assets *lua.LTable) {
 				parts := strings.Split(line, " > ")
 				manifest[parts[0]] = parts[1]
 			}
+		} else {
+			panic(err)
 		}
 	}
 
-	assets.ForEach(func(_ lua.LValue, entry lua.LValue) {
-		if entry.Type() != lua.LTTable {
-			return
-		}
-
-		table := entry.(*lua.LTable)
-
-		values := make(LValueMap)
-
-		asset := Asset{
-			Values: &values,
-		}
-
-		table.ForEach(func(key lua.LValue, value lua.LValue) {
-			if key.Type() != lua.LTString {
+	assets.ForEach(
+		func(_ lua.LValue, entry lua.LValue) {
+			if entry.Type() != lua.LTTable {
 				return
 			}
 
-			key = lua.LString(key.String())
+			table := entry.(*lua.LTable)
 
-			switch key.String() {
-			case "name":
-				asset.Name = value.String()
-			case "src":
-				asset.Src = value.String()
-			case "type":
-				asset.Type = value.String()
-			case "mime":
-				asset.Mime = value.String()
-			default:
-				values[key.String()] = value
+			values := make(LValueMap)
+
+			asset := Asset{
+				Values: &values,
 			}
-		})
 
-		if app.Mode == ModeProd {
-			if val, ok := manifest[asset.Src]; ok {
-				asset.BuildSrc = val
-			} else if val, ok := manifest[asset.Name]; ok {
-				asset.BuildSrc = val
+			table.ForEach(
+				func(key lua.LValue, value lua.LValue) {
+					if key.Type() != lua.LTString {
+						return
+					}
+
+					key = lua.LString(key.String())
+
+					switch key.String() {
+					case "name":
+						asset.Name = value.String()
+					case "src":
+						asset.Src = value.String()
+					case "type":
+						asset.Type = value.String()
+					case "mime":
+						asset.Mime = value.String()
+					default:
+						values[key.String()] = value
+					}
+				},
+			)
+
+			if app.Mode == ModeProd {
+				if val, ok := manifest[asset.Src]; ok {
+					asset.BuildSrc = val
+				} else if val, ok := manifest[asset.Name]; ok {
+					asset.BuildSrc = val
+				}
 			}
-		}
 
-		if asset.Src == "" {
-			panic(fmt.Sprintf("asset %s Has no src", asset.Name))
-		}
-
-		if asset.Name == "" {
-			asset.Name = asset.Src
-		}
-
-		if asset.Mime == "" {
-			switch asset.Type {
-			case "js":
-				asset.Mime = "application/javascript"
-			case "css":
-				asset.Mime = "text/css"
-			default:
-				asset.Mime = "application/octet-stream"
+			if asset.Src == "" {
+				panic(fmt.Sprintf("asset %s Has no src", asset.Name))
 			}
-		}
 
-		app.Assets[asset.Name] = asset
-	})
+			if asset.Name == "" {
+				asset.Name = asset.Src
+			}
+
+			if asset.Mime == "" {
+				switch asset.Type {
+				case "js":
+					asset.Mime = "application/javascript"
+				case "css":
+					asset.Mime = "text/css"
+				default:
+					asset.Mime = "application/octet-stream"
+				}
+			}
+
+			app.Assets[asset.Name] = asset
+		},
+	)
 }
