@@ -18,5 +18,6 @@ COPY --from=go-builder /app/app.lua ./
 COPY --from=go-builder /app/www/pages ./www/pages
 COPY --from=go-builder /app/www/posts ./www/posts
 COPY --from=go-builder /app/www/static ./www/static
+RUN ls
 ENTRYPOINT ["./main"]
 CMD ["--mode=production"]
