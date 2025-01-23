@@ -12,7 +12,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o main .
 
 FROM alpine:latest
 WORKDIR /app
-COPY --from=go-builder /app/__immutable /__immutable
+COPY --from=go-builder /app/__immutable ./__immutable
 COPY --from=go-builder /app/main ./
 COPY --from=go-builder /app/app.lua ./
 COPY --from=go-builder /app/www/pages ./www/pages
