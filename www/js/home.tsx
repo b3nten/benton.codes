@@ -116,7 +116,7 @@ export class HomeWindowContent extends Ivysaur {
         display: block;
         width: 100%;
         height: 100%;
-        background-color: black;
+        background-color: var(--bg-color);
         overflow: scroll;
         filter: var(--focused, brightness(100%)) var(--unfocused, brightness(60%) saturate(50%));
         border-right: 1px solid #888 !important;
@@ -147,6 +147,7 @@ export class HomeWindowTitle extends Ivysaur {
       :host {
         border: 1px solid #888 !important;
         background-color: black/70%
+        color: var(--text-color);
         height: 32px;
         display: flex;
         justify-content: space-between;
@@ -164,7 +165,7 @@ export class HomeWindowTitle extends Ivysaur {
       }
 
       .link-btn {
-        color: white;
+        color: var(--text-color);
         text-decoration: none;
         padding: 4px;
         margin: 4px;
@@ -175,7 +176,7 @@ export class HomeWindowTitle extends Ivysaur {
       }
 
       .close-btn {
-        color: white;
+        color: var(--text-color);
         padding: 4px;
         margin: 0 8px;
         cursor: pointer;
