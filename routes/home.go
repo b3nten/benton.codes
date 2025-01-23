@@ -63,33 +63,31 @@ func HomePage(app *core.App) Node {
 					Ul(
 						Class("home_section_list"),
 						Li(
-							A(
+							homeWindow(
+								"call of duty",
 								templates.EncryptedText("call of duty", "hover", "mount"),
 								Href("/p/call-of-duty"),
 							),
 						),
 						Li(
-							A(
+							homeWindow(
+								"house of the dragon",
 								templates.EncryptedText("house of the dragon", "hover", "mount"),
 								Href("/p/house-of-the-dragon"),
 							),
 						),
 						Li(
-							A(
+							homeWindow(
+								"chefs table",
 								templates.EncryptedText("chefs table", "hover", "mount"),
 								Href("/p/chefs-table"),
 							),
 						),
 						Li(
-							A(
+							homeWindow(
+								"industry music",
 								templates.EncryptedText("industry music", "hover", "mount"),
 								Href("/p/industry-music"),
-							),
-						),
-						Li(
-							A(
-								templates.EncryptedText("droplab.com", "hover", "mount"),
-								Href("/p/droplab.com"),
 							),
 						),
 					),
@@ -103,19 +101,22 @@ func HomePage(app *core.App) Node {
 					Ul(
 						Class("home_section_list"),
 						Li(
-							A(
+							homeWindow(
+								"lua templating with go",
 								templates.EncryptedText("lua templating with go", "hover", "mount"),
 								Href("/p/lua-templating-with-go"),
 							),
 						),
 						Li(
-							A(
+							homeWindow(
+								"immediate mode web components",
 								templates.EncryptedText("immediate mode web components", "hover", "mount"),
 								Href("/p/immediate-mode-web-components"),
 							),
 						),
 						Li(
-							A(
+							homeWindow(
+								"lua for application configuration",
 								templates.EncryptedText("lua for application configuration", "hover", "mount"),
 								Href("/p/lua-for-application-configuration"),
 							),
@@ -136,12 +137,14 @@ func HomePage(app *core.App) Node {
 									"building a web build pipeline with go & lua", "hover", "mount",
 								),
 								Href("/p/building-a-web-build-pipeline-with-go-and-lua"),
+								Target("_blank"),
 							),
 						),
 						Li(
 							A(
 								templates.EncryptedText("introducing blackberry.js", "hover", "mount"),
 								Href("/p/introducing-blackberry.js"),
+								Target("_blank"),
 							),
 						),
 					),
