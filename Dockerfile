@@ -14,6 +14,7 @@ FROM alpine:latest
 WORKDIR /app
 COPY --from=go-builder /app/__immutable /__immutable
 COPY --from=go-builder /app/main ./
+COPY --from=go-builder /app/app.lua ./
 COPY --from=go-builder /app/www/pages ./www/pages
 COPY --from=go-builder /app/www/posts ./www/posts
 COPY --from=go-builder /app/www/static ./www/static
