@@ -19,4 +19,4 @@ COPY --from=go-builder /app/www/pages ./www/pages
 COPY --from=go-builder /app/www/posts ./www/posts
 COPY --from=go-builder /app/www/static ./www/static
 ENTRYPOINT ["./main"]
-CMD ["--prod"]
+CMD ["--production"]
