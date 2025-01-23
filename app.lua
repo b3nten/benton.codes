@@ -10,12 +10,6 @@ js_home = js {
     minify = is_prod,
 }
 
-js_blackberry = js {
-    name = "blackberry.js",
-    src = "www/js/blackberry.ts",
-    minify = is_prod,
-}
-
 global_css = css {
     name = "global.css",
     src = "www/css/global.css",
