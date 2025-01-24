@@ -53,7 +53,7 @@ func registerRoutes(app *core.App, r *chi.Mux) {
 				return
 			}
 
-			file, err := os.Open("www/pages/blackberry.html")
+			file, err := os.Open("www/static/blackberry.html")
 			if err != nil {
 				w.WriteHeader(404)
 				w.Write([]byte("404 - Not Found"))

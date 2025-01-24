@@ -7,17 +7,12 @@ import (
 	"io"
 	"strings"
 
+	"benton.codes/core"
 	"golang.org/x/net/html"
 )
 
 //go:embed *.html
 var postFS embed.FS
-
-type Posts interface {
-	Get(string) (Post, error)
-}
-
-var FS Posts
 
 type Post struct {
 	Title string
@@ -26,33 +21,46 @@ type Post struct {
 	Content string
 }
 
-type devPostFs struct {}
+var mode core.Mode
 
-func (fs *devPostFs) Get(path string) (Post, error) {
+func Init(a *core.App) {
+	mode = a.Mode
+}
 
-	post, err := os.Open("www/posts/" + path + ".html")
+func Get(path string) (Post, error) {
+	var post []byte
+
+	if mode == core.ModeDev {
+		postFile, err := os.Open("www/posts/" + path + ".html")
+		if err != nil {
+			return Post{}, err
+		}
+		defer postFile.Close()
+		post, err = io.ReadAll(postFile)
+	} else {
+		postFile, err := postFS.Open(path + ".html")
+		if err != nil {
+			return Post{}, err
+		}
+		defer postFile.Close()
+		post, err = io.ReadAll(postFile)
+	}
+
+	parsed, err := html.ParseFragment(
+		strings.NewReader(string(post)),
+		nil,
+	)
 
 	if err != nil {
 		return Post{}, err
 	}
 
-	postBytes, err := io.ReadAll(post)
-
-	parsed, err := html.ParseFragment(
-		strings.NewReader(string(postBytes)),
-		nil,
-	)
-
 	postData := &Post{}
-	postData.Content = string(postBytes)
+	postData.Content = string(post)
 
 	parseRow(parsed[0], postData)
 
 	return *postData, nil
-}
-
-func init() {
-	FS = &devPostFs{}
 }
 
 func parseRow(row *html.Node, post *Post) {

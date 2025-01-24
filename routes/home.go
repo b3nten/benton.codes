@@ -157,7 +157,7 @@ func HomePage(app *core.App) Node {
 }
 
 func HomePostPage(app *core.App, w http.ResponseWriter, path string, fragment bool) {
-	post, err := posts.FS.Get(path)
+	post, err := posts.Get(path)
 
 	if err != nil {
 		w.WriteHeader(404)
