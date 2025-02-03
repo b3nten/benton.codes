@@ -326,7 +326,7 @@ func waypoints(showHome bool) Node {
 				A(
 					templates.EncryptedText("x.com", "hover", "mount"),
 					Class("waypoint_link"),
-					Href("https://x.com/Cohn_Jarmack"),
+					Href("https://x.com/_b_e_n_t_o_n_"),
 					Target("_blank"),
 				),
 			),
