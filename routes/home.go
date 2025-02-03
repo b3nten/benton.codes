@@ -9,6 +9,8 @@ import (
 	"net/http"
 )
 
+var headerText = `webdev, browser hacker, blender fanboy, go enthusiast, mojo curious. i love writing code. this is my digital home.`
+
 func HomePage(app *core.App) Node {
 	head := &[]Node{
 		Meta(
@@ -19,7 +21,7 @@ func HomePage(app *core.App) Node {
 	body := &[]Node{
 		Header(
 			templates.EncryptedText(
-				"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+				headerText,
 				"mount",
 			),
 			Class("home_header cursor-default"),
@@ -46,10 +48,10 @@ func HomePage(app *core.App) Node {
 							),
 						),
 						Li(
-							homeWindow(
-								"blackberry.js",
+							A(
 								templates.EncryptedText("blackberry.js", "hover", "mount"),
 								Href("/blackberry.js"),
+								Target("_blank"),
 							),
 						),
 					),
@@ -92,63 +94,63 @@ func HomePage(app *core.App) Node {
 						),
 					),
 				),
-				Section(
-					Class("home_section_container"),
-					H2(
-						Text("Experiments"),
-						Class("home_section_title"),
-					),
-					Ul(
-						Class("home_section_list"),
-						Li(
-							homeWindow(
-								"lua templating with go",
-								templates.EncryptedText("lua templating with go", "hover", "mount"),
-								Href("/p/lua-templating-with-go"),
-							),
-						),
-						Li(
-							homeWindow(
-								"immediate mode web components",
-								templates.EncryptedText("immediate mode web components", "hover", "mount"),
-								Href("/p/immediate-mode-web-components"),
-							),
-						),
-						Li(
-							homeWindow(
-								"lua for application configuration",
-								templates.EncryptedText("lua for application configuration", "hover", "mount"),
-								Href("/p/lua-for-application-configuration"),
-							),
-						),
-					),
-				),
-				Section(
-					Class("home_section_container"),
-					H2(
-						Text("Blog"),
-						Class("home_section_title"),
-					),
-					Ul(
-						Class("home_section_list"),
-						Li(
-							A(
-								templates.EncryptedText(
-									"building a web build pipeline with go & lua", "hover", "mount",
-								),
-								Href("/p/building-a-web-build-pipeline-with-go-and-lua"),
-								Target("_blank"),
-							),
-						),
-						Li(
-							A(
-								templates.EncryptedText("introducing blackberry.js", "hover", "mount"),
-								Href("/p/introducing-blackberry.js"),
-								Target("_blank"),
-							),
-						),
-					),
-				),
+				//Section(
+				//	Class("home_section_container"),
+				//	H2(
+				//		Text("Experiments"),
+				//		Class("home_section_title"),
+				//	),
+				//	Ul(
+				//		Class("home_section_list"),
+				//		Li(
+				//			homeWindow(
+				//				"lua templating with go",
+				//				templates.EncryptedText("lua templating with go", "hover", "mount"),
+				//				Href("/p/lua-templating-with-go"),
+				//			),
+				//		),
+				//		Li(
+				//			homeWindow(
+				//				"immediate mode web components",
+				//				templates.EncryptedText("immediate mode web components", "hover", "mount"),
+				//				Href("/p/immediate-mode-web-components"),
+				//			),
+				//		),
+				//		Li(
+				//			homeWindow(
+				//				"lua for application configuration",
+				//				templates.EncryptedText("lua for application configuration", "hover", "mount"),
+				//				Href("/p/lua-for-application-configuration"),
+				//			),
+				//		),
+				//	),
+				//),
+				//Section(
+				//	Class("home_section_container"),
+				//	H2(
+				//		Text("Blog"),
+				//		Class("home_section_title"),
+				//	),
+				//	Ul(
+				//		Class("home_section_list"),
+				//		Li(
+				//			A(
+				//				templates.EncryptedText(
+				//					"building a web build pipeline with go & lua", "hover", "mount",
+				//				),
+				//				Href("/p/building-a-web-build-pipeline-with-go-and-lua"),
+				//				Target("_blank"),
+				//			),
+				//		),
+				//		Li(
+				//			A(
+				//				templates.EncryptedText("introducing blackberry.js", "hover", "mount"),
+				//				Href("/p/introducing-blackberry.js"),
+				//				Target("_blank"),
+				//			),
+				//		),
+				//	),
+				//),
 			),
 		),
 	}

@@ -4,12 +4,6 @@ js_main = js {
     minify = is_prod,
 }
 
-js_home = js {
-    name = "home.js",
-    src = "www/js/home.tsx",
-    minify = is_prod,
-}
-
 global_css = css {
     name = "global.css",
     src = "www/css/global.css",
@@ -18,8 +12,12 @@ global_css = css {
 
 home_css = css {
     name = "home.css",
-    src = "www/css/home.css",
-    minify = is_prod,
+    src = "www/css/home.css"
+}
+
+js_home = js {
+    name = "home.js",
+    src = "www/js/home.tsx"
 }
 
 app {
@@ -29,8 +27,7 @@ app {
     assets = {
         global_css,
         home_css,
-
         js_main,
-        js_home
+        js_home,
     },
 }

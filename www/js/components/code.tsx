@@ -26,7 +26,7 @@ export class CodeBlock extends Ivysaur {
       padding: 0.5rem;
       border-bottom: 1px solid color-mix(in srgb, var(--text-color), transparent 90%);
       display: flex;
-      justify-content: space-between;
+      justify-content: space-between;           
       align-items: center;
       font-size: 1rem;
 
