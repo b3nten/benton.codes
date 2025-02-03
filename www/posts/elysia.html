@@ -9,7 +9,6 @@
     WebGL and WebXR, and is built on top of Three.js.
 "></meta>
 
-
 <div class="flex flex-row flex-items-center">
     <a href="https://github.com/b3nten/elysia" target="_blank">
         <svg height="32" aria-hidden="true" viewBox="0 0 24 24" version="1.1" width="32" data-view-component="true">
@@ -29,5 +28,25 @@
     physics via jolt, advanced graphics, and more.
 </p>
 
-<img class="mb05" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTb1j2ZtDzX5iYM8zEyV9WIuh3isBErH9qzQA&s">
-<img class="mb05" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTb1j2ZtDzX5iYM8zEyV9WIuh3isBErH9qzQA&s">
+<img class="mb05" src="/static/work/elysia01.png">
+
+<p></p>
+<code-block title="example-actor.ts" language="js" code="
+class MyActor extends Actor {
+    let cube = new Mesh(assets.customCube, new CustomMaterial)
+
+    onEnterScene = () => {
+        this.addComponent(cube)
+    }
+
+    onUpdate = (t) => {
+        this.cube.rotation.x += .1 * t;
+
+        if(isNearby(this, this.scene.getComponentByType(PlayerActor))) {
+            this.cube.material.color = 'red'
+        } else {
+            this.cube.material.color = 'blue'
+        }
+    }
+}
+"></code-block>
