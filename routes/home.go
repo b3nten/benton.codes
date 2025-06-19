@@ -1,15 +1,18 @@
 package routes
 
 import (
+	"net/http"
+
 	"benton.codes/core"
 	"benton.codes/templates"
 	"benton.codes/www/posts"
 	. "maragu.dev/gomponents"
 	. "maragu.dev/gomponents/html"
-	"net/http"
 )
 
-var headerText = `webdev, browser hacker, blender fanboy, go enthusiast, mojo curious. i love writing code. this is my digital home.`
+var headerText = core.Dedent(`
+	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+`)
 
 func HomePage(app *core.App) Node {
 	head := &[]Node{
@@ -32,30 +35,6 @@ func HomePage(app *core.App) Node {
 			templates.Spacer("0", "3rem"),
 			Div(
 				Class("home_content"),
-				Section(
-					Class("home_section_container"),
-					H2(
-						Text("Projects"),
-						Class("home_section_title"),
-					),
-					Ul(
-						Class("home_section_list"),
-						Li(
-							homeWindow(
-								"elysia",
-								templates.EncryptedText("elysia", "hover", "mount"),
-								Href("/p/elysia"),
-							),
-						),
-						Li(
-							A(
-								templates.EncryptedText("blackberry.js", "hover", "mount"),
-								Href("/blackberry.js"),
-								Target("_blank"),
-							),
-						),
-					),
-				),
 				Section(
 					Class("home_section_container"),
 					H2(
@@ -92,65 +71,60 @@ func HomePage(app *core.App) Node {
 								Href("/p/industry-music"),
 							),
 						),
+						Li(
+							homeWindow(
+								"moon my meme",
+								templates.EncryptedText("moon my meme", "hover", "mount"),
+								Href("/p/moon-my-meme"),
+							),
+						),
+						Li(
+							homeWindow(
+								"leroy & rose",
+								templates.EncryptedText("leroy & rose", "hover", "mount"),
+								Href("/p/leroy-and-rose"),
+							),
+						),
+						Li(
+							homeWindow(
+								"droplab.com",
+								templates.EncryptedText("droplab.com", "hover", "mount"),
+								Href("/p/droplab.com"),
+							),
+						),
 					),
 				),
-				//Section(
-				//	Class("home_section_container"),
-				//	H2(
-				//		Text("Experiments"),
-				//		Class("home_section_title"),
-				//	),
-				//	Ul(
-				//		Class("home_section_list"),
-				//		Li(
-				//			homeWindow(
-				//				"lua templating with go",
-				//				templates.EncryptedText("lua templating with go", "hover", "mount"),
-				//				Href("/p/lua-templating-with-go"),
-				//			),
-				//		),
-				//		Li(
-				//			homeWindow(
-				//				"immediate mode web components",
-				//				templates.EncryptedText("immediate mode web components", "hover", "mount"),
-				//				Href("/p/immediate-mode-web-components"),
-				//			),
-				//		),
-				//		Li(
-				//			homeWindow(
-				//				"lua for application configuration",
-				//				templates.EncryptedText("lua for application configuration", "hover", "mount"),
-				//				Href("/p/lua-for-application-configuration"),
-				//			),
-				//		),
-				//	),
-				//),
-				//Section(
-				//	Class("home_section_container"),
-				//	H2(
-				//		Text("Blog"),
-				//		Class("home_section_title"),
-				//	),
-				//	Ul(
-				//		Class("home_section_list"),
-				//		Li(
-				//			A(
-				//				templates.EncryptedText(
-				//					"building a web build pipeline with go & lua", "hover", "mount",
-				//				),
-				//				Href("/p/building-a-web-build-pipeline-with-go-and-lua"),
-				//				Target("_blank"),
-				//			),
-				//		),
-				//		Li(
-				//			A(
-				//				templates.EncryptedText("introducing blackberry.js", "hover", "mount"),
-				//				Href("/p/introducing-blackberry.js"),
-				//				Target("_blank"),
-				//			),
-				//		),
-				//	),
-				//),
+				Section(
+					Class("home_section_container"),
+					H2(
+						Text("Projects"),
+						Class("home_section_title"),
+					),
+					Ul(
+						Class("home_section_list"),
+						Li(
+							homeWindow(
+								"elysia",
+								templates.EncryptedText("elysia", "hover", "mount"),
+								Href("/p/elysia"),
+							),
+						),
+						Li(
+							homeWindow(
+								"vono",
+								templates.EncryptedText("vono", "hover", "mount"),
+								Href("/p/vono"),
+							),
+						),
+						Li(
+							homeWindow(
+								"blackberry.js",
+								templates.EncryptedText("blackberry.js", "hover", "mount"),
+								Href("/p/blackberry-js"),
+							),
+						),
+					),
+				),
 			),
 		),
 	}
@@ -169,24 +143,25 @@ func HomePostPage(app *core.App, w http.ResponseWriter, path string, fragment bo
 
 	article := Article(
 		Class("home-post"),
-		El(
-			"animate-children",
-			Attr(
-				"on-mounted", `
-					animate(this.childNodes,
-					{
-						y: ["-50%", 0],
-						opacity: [0, 1]
-					},
-					{
-						duration: .4,
-						delay: stagger(.05, { startDelay: .5, easing: "easeIn" }),
-						easing: "easeIn"
-					})
-				`,
-			),
-			Raw(post.Content),
-		),
+		// El(
+		// 	"animate-children",
+		// 	Attr(
+		// 		"on-mounted", `
+		// 			animate(this.childNodes,
+		// 			{
+		// 				y: ["-50%", 0],
+		// 				opacity: [0, 1]
+		// 			},
+		// 			{
+		// 				duration: .4,
+		// 				delay: stagger(.05, { startDelay: .5, easing: "easeIn" }),
+		// 				easing: "easeIn"
+		// 			})
+		// 		`,
+		// 	),
+		// Raw(post.Content),
+		// ),
+		Raw(post.Content),
 	)
 
 	var renderable Node

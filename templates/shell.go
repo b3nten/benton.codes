@@ -60,6 +60,7 @@ func Shell(app *core.App, title string, head []Node, children []Node) Node {
 						ID("window-container"),
 						Style(`position: relative; z-index: 999;`),
 					),
+					Class("noselect"),
 				}, children...,
 			),
 		},

@@ -22,16 +22,19 @@
 <div class="mt12"></div>
 <p>
     Elysia is a 3D game engine that I built for developing games and
-    interactive experiences in the browser. Built on top of three.js,
-    it's inspired by Unity and Unreal's actor / component systems and
-    provides libraries for input handling, audio, an asset pipeline,
-    physics via jolt, advanced graphics, and more.
+    interactive experiences in the browser. Built on top of Three.js,
+    it's inspired by Unity and Unreal engine and provides libraries
+    for input handling, audio playback, an asset pipeline,
+    physics via jolt, advanced graphics, and more. Version 2.0 is under
+    development which brings multithreading to the entire engine.
+</p>
+<p>
+
 </p>
 
 <img class="mb05" src="/static/work/elysia01.png">
 
-<p></p>
-<code-block title="example-actor.ts" language="js" code="
+<code-block hidden title="example-actor.ts" language="js" code="
 class MyActor extends Actor {
     let cube = new Mesh(assets.customCube, new CustomMaterial)
 
