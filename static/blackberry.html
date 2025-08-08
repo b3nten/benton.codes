@@ -1,0 +1,1208 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+            name="description"
+            content="Blackberry.js - a zero-build framework for the artisanal web"
+        />
+
+        <!--	Deps	-->
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
+            data-manual
+            defer
+        ></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <style>
+            /* vietnamese */
+            @font-face {
+                font-family: "VT323";
+                font-style: normal;
+                font-weight: 400;
+                font-display: swap;
+                src: url(https://fonts.gstatic.com/s/vt323/v17/pxiKyp0ihIEF2isQFJXGdg.woff2)
+                    format("woff2");
+                unicode-range:
+                    U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169,
+                    U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304,
+                    U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+            }
+            /* latin-ext */
+            @font-face {
+                font-family: "VT323";
+                font-style: normal;
+                font-weight: 400;
+                font-display: swap;
+                src: url(https://fonts.gstatic.com/s/vt323/v17/pxiKyp0ihIEF2isRFJXGdg.woff2)
+                    format("woff2");
+                unicode-range:
+                    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
+                    U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF,
+                    U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0,
+                    U+2113, U+2C60-2C7F, U+A720-A7FF;
+            }
+            /* latin */
+            @font-face {
+                font-family: "VT323";
+                font-style: normal;
+                font-weight: 400;
+                font-display: swap;
+                src: url(https://fonts.gstatic.com/s/vt323/v17/pxiKyp0ihIEF2isfFJU.woff2)
+                    format("woff2");
+                unicode-range:
+                    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+                    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC,
+                    U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+            }
+        </style>
+
+        <!--	Meta	-->
+        <title>Blackberry.js - for the artisinal web</title>
+
+        <!--	Init	-->
+        <script type="module" defer>
+            import Blackberry from "https://esm.sh/blackberry.js@0.1.6/es2022/blackberry.mjs";
+            Blackberry();
+        </script>
+
+        <!-- 	Styles	-->
+        <style>
+            [blackberry-cloak] {
+                display: none;
+            }
+        </style>
+        <style>
+            :root {
+                --blackberry-dark: #1a1b26;
+                --blackberry-main: #2e3440;
+                --blackberry-light: #434c5e;
+                --blackberry-accent: #88c0d0;
+                --blackberry-text: #d8dee9;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                background-color: var(--blackberry-dark);
+                background-image: linear-gradient(
+                        var(--blackberry-light) 1px,
+                        transparent 1px
+                    ),
+                    linear-gradient(
+                        90deg,
+                        var(--blackberry-light) 1px,
+                        transparent 1px
+                    );
+                background-size: 20px 20px;
+                background-position: -1px -1px;
+                color: var(--blackberry-text);
+                font-family: sans-serif, monospace;
+                padding: 2rem;
+                position: relative;
+
+                @media (max-width: 768px) {
+                    padding: 1rem;
+                }
+            }
+
+            body::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: var(--blackberry-main);
+                opacity: 0.7;
+                pointer-events: none;
+                z-index: 0;
+            }
+
+            .container {
+                max-width: 1024px;
+                margin: 0 auto;
+                padding: 2rem;
+                background-color: color-mix(in srgb, var(--blackberry-main), transparent 30%);
+                border: 4px solid var(--blackberry-light);
+                box-shadow: 8px 8px 0 var(--blackberry-dark);
+                position: relative;
+                z-index: 1;
+
+                @media (max-width: 768px) {
+                    padding: 1rem;
+                }
+            }
+
+            h1.title,
+            h2.title,
+            h3.title {
+                color: var(--blackberry-accent);
+                margin: 2rem 0 1rem;
+                text-shadow: 2px 2px 0 var(--blackberry-dark);
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
+                font-family: "VT323", monospace;
+            }
+
+            h1.title {
+                font-size: 4rem;
+                text-align: center;
+                margin-bottom: 2rem;
+                @media (max-width: 550px) {
+                    font-size: 2.55rem;
+                }
+            }
+
+            .space {
+                padding-top: --y;
+                padding-right; --x;
+            }
+
+            h2.title {
+                font-size: 3rem;
+                /* border-bottom: 4px solid var(--blackberry-light); */
+                padding-bottom: 0.5rem;
+                @media (max-width: 550px) {
+                    font-size: 2.2rem;
+                }
+            }
+
+            h3.title {
+                font-size: 2rem;
+                margin-top: 2rem;
+            }
+
+            h4.title {
+                font-size: 1.5rem;
+                margin-top: 1rem;
+            }
+
+            .text {
+                margin: 1rem  0 1rem 0;
+                font-family: sans-serif;
+                font-size: 1.125rem;
+                line-height: 140%;
+
+                @media (max-width: 768px) {
+                    font-size: 1rem;
+                }
+            }
+
+            .font-display {
+                font-family: "VT323", monospace;
+            }
+
+            a {
+                color: var(--blackberry-accent);
+                text-decoration: none;
+                font-weight: bold;
+                transition: all 90ms;
+                &:hover {
+                    color: var(--blackberry-text);
+                }
+                :visited {
+                    color: var(--blackberry-accent);
+                }
+            }
+
+            .header-logo-container {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                margin: 2rem 0;
+                @media (max-width: 768px) {
+                    /* hide 2 */
+                    & img:nth-child(2) {
+                        display: none;
+                    }
+                }
+            }
+
+            .header-logo {
+                display: block;
+                margin: 0 auto;
+                width: 100px;
+                height: 100px;
+                filter: drop-shadow(2px 2px 0 var(--blackberry-dark));
+
+                @media (max-width: 768px) {
+                    width: 50px;
+                    height: 50px;
+                }
+            }
+
+            .feature-list {
+                margin: 1rem 0;
+                padding-left: 1rem;
+            }
+
+            .feature-list li {
+                margin: 0.5rem 0;
+                list-style: none;
+                position: relative;
+                padding-left: 1.5rem;
+                font-size: 1.25rem;
+            }
+
+            .feature-list li::before {
+                content: "►";
+                position: absolute;
+                left: 0;
+                color: var(--blackberry-accent);
+            }
+
+            .note {
+                background: var(--blackberry-light);
+                padding: 0.5rem;
+                margin: 1rem 0;
+                border-left: 4px solid var(--blackberry-accent);
+                font-size: 1.25rem;
+                font-family: "VT323", monospace;
+            }
+
+            .text-center {
+                text-align: center;
+            }
+
+            spacer-line {
+                display: block;
+                height: 4px;
+                width: 100%;
+                margin-top: 3rem;
+                margin-bottom: 3rem;
+                background: var(--blackberry-light);
+            }
+
+            spacer-berries {
+                display: block;
+                height: 4px;
+                width: 100%;
+            }
+
+            .qatitle {
+                font-size: 1.75rem;
+                font-weight: bold;
+                margin: 1rem 0;
+            }
+
+            .panel {
+                background: var(--blackberry-light);
+                padding: 1rem;
+                margin: 1rem 0;
+                border-left: 4px solid var(--blackberry-accent);
+                font-size: 1.25rem;
+
+                @media (max-width: 768px) {
+                    padding: 0.5rem;
+                    font-size: 1rem;
+                }
+            }
+        </style>
+    </head>
+    <body blackberry-cloak>
+        <!-- ##Counter Component -->
+        <template blackberry="counter-component" attributes="initial">
+            <button @click="increment" :text="`the count is ${count}`"></button>
+            <script>
+                $state.count = Number($attributes.initial ?? 0);
+                $state.increment = () => $state.count++;
+                $effect(() => console.log("count changed", $state.count));
+            </script>
+            <style>
+                button {
+                    background: var(--blackberry-light);
+                    padding: 4px 8px;
+                    border: 2px solid var(--blackberry-accent);
+                    font-family: "VT323", monospace;
+                    font-size: 2rem;
+                    color: var(--blackberry-text);
+                    box-shadow: 4px 4px 0 var(--blackberry-dark);
+                    transition: all 90ms;
+
+                    &:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 6px 6px 0 var(--blackberry-dark);
+                    }
+
+                    &:active {
+                        transform: translateY(2px);
+                        box-shadow: 4px 4px 0 var(--blackberry-dark);
+                    }
+                }
+            </style>
+        </template>
+
+        <!-- ##Spacer Line Component -->
+        <template blackberry="x-note">
+            <div>
+                <p>
+                    💡 <span><slot></slot></span>
+                </p>
+            </div>
+            <style>
+                div {
+                    background: var(--blackberry-light);
+                    padding: 2px 0.25rem;
+                    margin: 1rem 0;
+                    border-left: 4px solid var(--blackberry-accent);
+                    font-size: 1.25rem;
+                    font-family: "VT323", monospace;
+                }
+            </style>
+        </template>
+
+        <!-- ##Inline Code Component -->
+        <template blackberry="inline-code">
+            <code><slot></slot></code>
+            <style>
+                code {
+                    padding: 2px 0.25rem;
+                    margin: 0.5rem 0;
+                    color: var(--blackberry-accent);
+                    font-size: 1.4rem;
+                    font-family: "VT323", monospace;
+                    border-radius: 4px;
+                }
+            </style>
+        </template>
+
+        <!-- ##Code Block Component -->
+        <template blackberry="code-block" attributes="language, content">
+            <script>
+                const content = $attributes.content.split("\n");
+                if (content.length > 1) {
+                    content.shift();
+                }
+                let indent = 0;
+                for (let i = 0; i < content[0].length; i++) {
+                    if (content[0][i] === "\t" || content[0][i] === " ")
+                        indent++;
+                    else break;
+                }
+                for (let i = 0; i < content.length; i++) {
+                    let char = 0;
+                    let str = content[i];
+                    while (
+                        (str[char] === "\t" || str[char] === " ") &&
+                        char < indent
+                    ) {
+                        content[i] = content[i].slice(1);
+                        char++;
+                    }
+                }
+                $state.className = `language-` + $attributes.language;
+                $state.content = Prism.highlight(
+                    content.join("\n").trim(),
+                    Prism.languages[$attributes.language],
+                    $attributes.language,
+                );
+            </script>
+            <pre><code :class="className" :html="content"></code></pre>
+            <style>
+                pre[class*="language-"],
+                code[class*="language-"] {
+                    color: #d8dee9;
+                    font-size: 1em;
+                    text-shadow: none;
+                    font-family:
+                        Consolas, Monaco, "Andale Mono", "Ubuntu Mono",
+                        monospace;
+                    direction: ltr;
+                    text-align: left;
+                    white-space: pre;
+                    word-spacing: normal;
+                    word-break: normal;
+                    line-height: 1.5;
+                    -moz-tab-size: 4;
+                    -o-tab-size: 4;
+                    tab-size: 4;
+                    -webkit-hyphens: none;
+                    -moz-hyphens: none;
+                    -ms-hyphens: none;
+                    hyphens: none;
+                }
+                pre[class*="language-"]::selection,
+                code[class*="language-"]::selection,
+                pre[class*="language-"]::mozselection,
+                code[class*="language-"]::mozselection {
+                    text-shadow: none;
+                    background: none;
+                }
+                @media print {
+                    pre[class*="language-"],
+                    code[class*="language-"] {
+                        text-shadow: none;
+                    }
+                }
+                pre[class*="language-"] {
+                    padding: 1em;
+                    margin: 0.5em 0;
+                    overflow: auto;
+                    background: #2e3440;
+                }
+                :not(pre) > code[class*="language-"] {
+                    padding: 0.1em;
+                    border-radius: 0.3em;
+                    color: #d8dee9;
+                    background: #2e3440;
+                }
+                /*********************************************************
+                * Tokens
+                */
+                .namespace {
+                    opacity: 0.7;
+                }
+                .token.comment,
+                .token.prolog,
+                .token.doctype,
+                .token.cdata {
+                    color: #606e87;
+                }
+                .token.punctuation {
+                    color: #81a1c1;
+                }
+                .token.property,
+                .token.tag,
+                .token.boolean,
+                .token.number,
+                .token.constant,
+                .token.symbol,
+                .token.deleted {
+                    color: var(--blackberry-text);
+                }
+                .token.selector,
+                .token.attr-name,
+                .token.string,
+                .token.char,
+                .token.builtin,
+                .token.inserted {
+                    color: var(--blackberry-accent);
+                }
+                .token.operator,
+                .token.entity,
+                .token.url,
+                .language-css .token.string,
+                .style .token.string {
+                    color: #80a2c1;
+                    background: none;
+                }
+                .token.atrule,
+                .token.attr-value,
+                .token.keyword {
+                    color: #81a1c1;
+                }
+                .token.function {
+                    color: #8fbcbc;
+                }
+                .token.regex,
+                .token.important,
+                .token.variable {
+                    color: #ee9900;
+                }
+                .token.important,
+                .token.bold {
+                    font-weight: bold;
+                }
+                .token.italic {
+                    font-style: italic;
+                }
+                .token.entity {
+                    cursor: help;
+                }
+                /*********************************************************
+                * Line highlighting
+                */
+                pre[data-line] {
+                    position: relative;
+                }
+                pre[class*="language-"] > code[class*="language-"] {
+                    position: relative;
+                    z-index: 1;
+                }
+                .line-highlight {
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    padding: inherit 0;
+                    margin-top: 1em;
+                    background: #3b4251;
+                    box-shadow: inset 5px 0 0 #d8dee9;
+                    z-index: 0;
+                    pointer-events: none;
+                    line-height: inherit;
+                    white-space: pre;
+                }
+
+                /* Custom */
+                pre {
+                    background: var(--blackberry-dark) !important;
+                    border: 2px solid var(--blackberry-light);
+                    overflow-x: auto;
+                    font-family: monospace;
+                    font-size: 1rem;
+                    padding: 1rem;
+                }
+            </style>
+        </template>
+
+        <!-- ##Tab Bar Component -->
+        <template blackberry="tab-bar" attributes="tabs">
+            <script>
+                $state.tabs = $attributes.tabs
+                    ? JSON.parse($attributes.tabs)
+                    : [];
+                $state.setTab = (name) => () => ($state.activeTab = name);
+                $state.activeTab = $state.tabs[0];
+            </script>
+            <ul id="tab-bar">
+                <template each:tab="tabs">
+                    <li
+                        :text="tab"
+                        @click="setTab(tab)"
+                        :active="activeTab === tab"
+                    ></li>
+                </template>
+            </ul>
+            <div id="content">
+                <slot :name="activeTab"></slot>
+            </div>
+            <style>
+                :host {
+                    display: block;
+                    background: var(--blackberry-main);
+                    border: 4px solid var(--blackberry-light);
+                    box-shadow: 8px 8px 0 var(--blackberry-dark);
+                    padding: 0 1rem;
+                    margin: 1rem 0;
+                    font-family: "VT323", monospace;
+                    font-size: 1.5rem;
+                }
+                #tab-bar {
+                    display: flex;
+                    list-style: none;
+                    margin: 0;
+                    padding: 0;
+                    width: 100%;
+                    background: var(--blackberry-light);
+                    & > li {
+                        cursor: pointer;
+                        margin: 0;
+                        padding: 0.25rem 0.5rem;
+                        background: var(--blackberry-light);
+                        &[active="true"] {
+                            background: var(--blackberry-accent);
+                        }
+                    }
+                }
+                #content {
+                    padding: 1rem;
+                }
+            </style>
+        </template>
+
+        <!-- ##Page Content -->
+        <div class="container">
+            <!-- ##Header -->
+            <h1 class="title">Blackberry.js</h1>
+            <div class="header-logo-container">
+                <img class="header-logo" src="/blackberry.png" />
+                <img class="header-logo" src="/blackberry.png" />
+                <img class="header-logo" src="/blackberry.png" />
+                <img class="header-logo" src="/blackberry.png" />
+                <img class="header-logo" src="/blackberry.png" />
+            </div>
+
+            <p class="text text-center font-display" style="font-size: 1.66rem">
+                A zero-build html component library for the artisanal web.
+            </p>
+
+            <spacer-line></spacer-line>
+
+            <!-- ##Overview -->
+            <section id="section-overview">
+                <h2 class="title">Overview</h2>
+                <p class="text">
+                    Blackberry is a small frontend library providing reactivity,
+                    composability, scoped styles, and a simple API to make
+                    webdev fun again.
+                </p>
+
+                <!-- Example -->
+                <code-block
+                    language="html"
+                    content='
+                <template blackberry="counter-component" attributes="initial">
+
+                    <button @click="increment" :text="`the count is ${count}`"></button>
+
+                    <script>
+                        $state.count = Number( $attributes.initial ?? 0 );
+                        $state.increment = () => $state.count++;
+                        $effect(() => console.log( "count changed", $state.count ));
+                    </script>
+
+                    <style>
+                        button { ... }
+                    </style>
+
+                </template>
+                '
+                ></code-block>
+
+                <code-block
+                    language="html"
+                    content='
+                <counter-component initial="3"></counter-component>
+                '
+                ></code-block>
+
+                <counter-component initial="3"></counter-component>
+
+                <p class="text">
+                    Blackberry.js is inspired by
+                    <a href="https://strawberry.quest" target="_blank"
+                        >Strawberry.js</a
+                    >, and is designed to be used as a lightweight html-first
+                    alternative to frameworks like Vue and Svelte without
+                    requiring build tooling or a complex dependency tree.
+                </p>
+            </section>
+
+            <!-- ##Guide -->
+            <section id="section-guide">
+                <!-- ##GUIDE -->
+                <h2 class="title">Guide</h2>
+                <p class="text">
+                    Blackberry has a very simple API. Components are defined
+                    using the <inline-code>template</inline-code> tag with a
+                    <inline-code>blackberry</inline-code> attribute signifying
+                    the component name, which must contain a hyphen. Inside of
+                    the template, you can define elements the component should
+                    render, a <inline-code>script</inline-code> tag for state
+                    and logic, and a <inline-code>style</inline-code> tag for
+                    styling.
+                </p>
+                <code-block
+                    language="html"
+                    content='
+                    <template blackberry="hello-world">
+                        <h1>Hello, world!</h1>
+                        <script>
+                            console.log("Hello, world!")
+                        </script>
+                        <style>
+                            h1 { color: red; }
+                        </style>
+                    </template>
+                '
+                ></code-block>
+
+                <h3 class="title">Setup</h3>
+                <p class="text">
+                    Include the Blackberry.js script in your html file. Calling
+                    <inline-code>Blackberry.start()</inline-code> parses and
+                    registers any components defined in the document. Subsequent
+                    components can be defined in the document and Blackberry
+                    will automatically register them.
+                </p>
+                <code-block
+                    language="html"
+                    content='
+                    <script type="module" defer>
+                        import Blackberry from "https://esm.sh/blackberry.js"
+                        Blackberry()
+                    </script>
+                '
+                ></code-block>
+
+                <p>
+                    Optionally, you can put a
+                    <inline-code>blackberry-cloak</inline-code>
+                    attribute on the document body and style it so that it
+                    remains hidden until blackberry has parsed and registered
+                    all components, in which case it will remove the attribute.
+                </p>
+
+                <h3 class="title">Script Tag</h3>
+                <p class="text">
+                    Blackberry components can define a top level
+                    <inline-code>script</inline-code> tag, which acts similarly
+                    to the script tag in Vue or Svelte components. It can be
+                    used to define reactive state, effects, cleanup functions,
+                    and access the underlying dom element of the component.
+                </p>
+
+                <h4 class="title">State</h4>
+                <p class="text">
+                    Code inside of the <inline-code>script</inline-code> tag has
+                    access to a <inline-code>$state</inline-code> object which
+                    can be used to store reactive data. Any changes to the state
+                    will trigger a re-render of the component. This data can be
+                    directly accessed inside of the component's template.
+                </p>
+                <code-block
+                    language="html"
+                    content='
+                    <script>
+                        $state.count = 0;
+                        $state.actions = {
+                            increment: () => $state.count++
+                        }
+                    </script>
+                    <button @click="actions.increment">
+                        <span :text="`the count is ${count}`"></span>
+                    </button>
+                '
+                ></code-block>
+
+                <h4 class="title">Attributes</h4>
+                <p class="text">
+                    Attributes are values that can be passed into a component.
+                    They can be defined on a component's template tag using a
+                    comma seperated
+                    <inline-code>attributes</inline-code> attribute, and
+                    accessed via the reactive
+                    <inline-code>$attributes</inline-code> object.
+                </p>
+                <code-block
+                    language="html"
+                    content='
+                    <template blackberry="attribute-example" attributes="foo, bar">
+                        <script>
+                            // attributes can be accessed via the $attributes object
+                            $state.foo = $attributes.foo;
+                        </script>
+                        <h1 :text="foo"></h1>
+                        <!-- As well as inside of the template -->
+                        <h2 :text="$attributes.bar"></h2>
+                    </template>
+
+                    <attribute-example foo="Hello" bar="World"></attribute-example>
+                '
+                ></code-block>
+
+                <h4 class="title">Effects</h4>
+                <p class="text">
+                    The effect function is available inside of the script tag
+                    via the <inline-code>$effect</inline-code> value. They are
+                    automatically run when the component is rendered and
+                    whenever a reactive value inside the scope of the callback
+                    changes.
+                </p>
+                <code-block
+                    language="html"
+                    content='
+                    <script>
+                        $effect(() => console.log("count changed", $state.count));
+                    </script>
+                    <button @click="increment" :text="`the count is ${count}`"></button>
+                '
+                ></code-block>
+
+                <h3 class="title">Templating</h3>
+
+                <p class="text">
+                    Templates can use directives to bind data to elements,
+                    listen for events, and conditionally render elements.
+                    Directives are javascript expressions that are evaluated in
+                    the context of the component.
+                </p>
+
+                <h4 class="title">Attributes</h4>
+                <p class="text">
+                    The <inline-code>:</inline-code> directive binds the value
+                    of the expression to the attribute. Example:
+                    <inline-code>:foo="`the count is ${count}`"</inline-code>
+                    will set the attribute <inline-code>foo</inline-code> to the
+                    value of the expression.
+                </p>
+
+                <h4 class="title">Text</h4>
+                <p class="text">
+                    The <inline-code>:text</inline-code> directive binds it's
+                    value as the text content of the node.
+                </p>
+
+                <h4 class="title">If</h4>
+                <p class="text">
+                    The <inline-code>:if</inline-code> directive conditionally
+                    renders the node based on the value of the expression.
+                </p>
+
+                <h4 class="title">HTML</h4>
+                <p class="text">
+                    The <inline-code>:html</inline-code> directive binds it's
+                    value as the innerHTML of the node.
+                    <x-note
+                        >Be careful when using this directive as it can be a
+                        security risk.</x-note
+                    >
+                </p>
+
+                <h4 class="title">Ref</h4>
+                <p class="text">
+                    The <inline-code>:ref</inline-code> directive binds the
+                    value of the dom element to the ref's
+                    <inline-code>value</inline-code> property.
+                </p>
+                <code-block
+                    language="html"
+                    content='
+                    <button :ref="buttonRef" @click="() => buttonRef.value.innerText = `clicked!`">Click me!</button>
+                    <script>
+                        $state.buttonRef = { value: null }
+                    </script>
+                '
+                ></code-block>
+
+                <h4 class="title">Events</h4>
+                <p class="text">
+                    The <inline-code>@</inline-code> directive binds it's value
+                    as an event listener. Example:
+                    <inline-code>@click="increment"</inline-code>
+                </p>
+                <code-block
+                    language="html"
+                    content='
+                    <button
+                        @click="() => alert(`boo!`)"
+                        @mouseover="() => console.log(`hovered!`)"
+                        @mouseleave="() => console.log(`left!`)"
+                    >
+                        boo
+                    </button>
+                '
+                ></code-block>
+
+                <h4 class="title">Lists</h4>
+                <p class="text">
+                    The <inline-code>each</inline-code> directive renders a list
+                    of elements for each item in an array. It must be used on a
+                    template tag, and follows the format
+                    <inline-code>each:item="items"</inline-code>.
+                </p>
+                <code-block
+                    language="html"
+                    content='
+                    <ul>
+                        <template each:item="items">
+                            <li :text="item.name" :key="item.id"></li>
+                        </template>
+                    </ul>
+                    <script>
+                        $state.items = [
+                            { id: 1, name: "apple" },
+                            { id: 2, name: "banana" },
+                            { id: 3, name: "cherry" }
+                        ]
+                    </script>
+                '
+                ></code-block>
+
+                <h4 class="title">Property Directive</h4>
+                <p class="text">
+                    The <inline-code>.</inline-code> directive binds the value
+                    of the expression to the element as a property. This is
+                    useful for passing values other than strings to components
+                    or setting properties on elements.
+                </p>
+                <code-block
+                    language="html"
+                    content='
+                    <template blackberry="parent-component">
+                        <child-component .hello="() => console.log(`Hello from parent!`)"></child-component>
+                    </template>
+
+                    <template blackberry="child-component">
+                        <button @click="$element.hello">Click me!</button>
+                    </template>
+                '
+                ></code-block>
+
+                <h4 class="title">Slots</h4>
+                <p class="text">
+                    Slots are used to pass content into a component. They are
+                    defined in the component's template using the
+                    <inline-code>slot</inline-code> tag. The content passed into
+                    the slot is rendered in place of the slot tag.
+                </p>
+                <code-block
+                    language="html"
+                    content='
+                    <template blackberry="slot-example">
+                        <div>
+                            <slot></slot>
+                        </div>
+                    </template>
+
+                    <slot-example>
+                        <h1>Hello, world!</h1>
+                    </slot-example>
+                '
+                ></code-block>
+
+                <h3 class="title">Styling</h3>
+                <p class="text">
+                    Styles can be defined in the
+                    <inline-code>style</inline-code> tag of a component. Styles
+                    are scoped to the component and do not leak out.
+                </p>
+                <p class="text">
+                    Because Blackberry components use the shadow-dom, they do
+                    not have access to global stylesheets by default. If you
+                    want your component to inherit styles from the outside
+                    document, you can set the
+                    <inline-code>global-styles</inline-code> attribute on a
+                    component template.
+                </p>
+            </section>
+
+            <spacer-line></spacer-line>
+
+            <!-- ##Todo example -->
+            <section id="todo-example">
+                <template blackberry="todo-component">
+                    <script>
+                        $state.input = { value: null };
+                        $state.todos = [
+                            { value: "learn blackberry", completed: true },
+                            { value: "download blackberry", completed: false },
+                            { value: "build something cool", completed: false },
+                        ];
+                        $state.actions = {
+                            addTodo: () => {
+                                if ($state.input.value) {
+                                    $state.todos.push({
+                                        value: $state.input.value.value,
+                                        completed: false,
+                                    });
+                                    $state.input.value.value = "";
+                                }
+                            },
+                            toggleTodo: (todo) => () =>
+                                (todo.completed = !todo.completed),
+                            removeTodo: (todo) => () =>
+                                ($state.todos = $state.todos.filter(
+                                    (t) => t !== todo,
+                                )),
+                        };
+                        $effect(() =>
+                            console.log("todos changed", $state.todos),
+                        );
+                    </script>
+                    <input :ref="input" type="text" placeholder="Add a todo" />
+                    <button class="add" @click="actions.addTodo">Add</button>
+                    <ul>
+                        <template each:todo="todos">
+                            <li>
+                                <input
+                                    type="checkbox"
+                                    @click="actions.toggleTodo(todo)"
+                                    .checked="todo.completed"
+                                />
+                                <span
+                                    :text="todo.value"
+                                    :style="`text-decoration:${todo.completed ? 'line-through' : 'none'};`"
+                                ></span>
+                                <button
+                                    class="remove"
+                                    @click="actions.removeTodo(todo)"
+                                >
+                                    🗑️
+                                </button>
+                            </li>
+                        </template>
+                    </ul>
+                    <style>
+                        ul {
+                            list-style: none;
+                            padding: 0;
+                        }
+                        .remove {
+                            background: transparent;
+                            border: none;
+                            cursor: pointer;
+                            font-size: 0.7rem;
+                            color: var(--blackberry-accent);
+                        }
+                        .add {
+                            background: var(--blackberry-accent);
+                            color: var(--blackberry-dark);
+                            padding: 4px 8px;
+                            border: 2px solid var(--blackberry-accent);
+                            font-family: "VT323", monospace;
+                            font-size: 1rem;
+                            transition: all 90ms;
+                        }
+                        input {
+                            padding: 4px 8px;
+                            border: 2px solid var(--blackberry-accent);
+                            font-family: "VT323", monospace;
+                            font-size: 1rem;
+                            color: var(--blackberry-dark);
+                            transition: all 90ms;
+
+                            &::placeholder {
+                                color: var(--blackberry-light);
+                            }
+
+                            &:focus {
+                                outline: none;
+                            }
+                        }
+                    </style>
+                </template>
+
+                <tab-bar tabs='["Todos", "Code"]'>
+                    <code-block
+                        slot="Code"
+                        language="html"
+                        content='
+                        <template blackberry="todo-component">
+
+                            <input :ref="input" type="text" placeholder="Add a todo" />
+                            <button class="add" @click="actions.addTodo">Add</button>
+                            <ul>
+                              <template each:todo="todos">
+                                <li>
+                                  <input type="checkbox" @click="actions.toggleTodo(todo)" .checked="todo.completed" />
+                                  <span :text="todo.value" :style="`text-decoration:${todo.completed ? `line-through` : `none`};`"></span>
+                                  <button class="remove" @click="actions.removeTodo(todo)">🗑️</button>
+                                </li>
+                              </template>
+                            </ul>
+
+                            <script>
+                              $state.input = { value: null }
+                              $state.todos = [
+                                { value: "learn blackberry", completed: true },
+                                { value: "download blackberry", completed: false },
+                                { value: "build something cool", completed: false },
+                              ]
+                              $state.actions = {
+                                addTodo: () => {
+                                  if ($state.input.value) {
+                                    $state.todos.push({ value: $state.input.value.value, completed: false })
+                                    $state.input.value.value = ""
+                                  }
+                                },
+                                toggleTodo: (todo) => () => todo.completed = !todo.completed,
+                                removeTodo: (todo) => () => $state.todos = $state.todos.filter(t => t !== todo)
+                              }
+                            </script>
+
+                            <style>
+                                ul {
+                                    list-style: none;
+                                    padding: 0;
+                                }
+                                .remove {
+                                    background: transparent;
+                                    border: none;
+                                    cursor: pointer;
+                                    font-size: .7rem;
+                                    color: var(--blackberry-accent);
+                                }
+                                .add {
+                                    background: var(--blackberry-accent);
+                                    color: var(--blackberry-dark);
+                                    padding: 4px 8px;
+                                    border: 2px solid var(--blackberry-accent);
+                                    font-family: "VT323", monospace;
+                                    font-size: 1rem;
+                                    transition: all 90ms;
+                                }
+                                input {
+                                    padding: 4px 8px;
+                                    border: 2px solid var(--blackberry-accent);
+                                    font-family: "VT323", monospace;
+                                    font-size: 1rem;
+                                    color: var(--blackberry-dark);
+                                    transition: all 90ms;
+                                    &::placeholder {
+                                        color: var(--blackberry-light);
+                                    }
+                                    &:focus {
+                                        outline: none;
+                                    }
+                                }
+                            </style>
+
+                        </template>
+                    '
+                    ></code-block>
+                    <todo-component slot="Todos"></todo-component>
+                </tab-bar>
+            </section>
+
+            <spacer-line></spacer-line>
+
+            <!-- ##FAQ -->
+            <section>
+                <h2 class="qatitle">Why did you make this?</h2>
+                <p class="text">
+                    I wanted a way to write reusable components while authoring
+                    HTML without needing to set up a build pipeline or pull in
+                    dependencies and additional JS. I wanted something I could
+                    use to "sketch" in HTML without the cognitive overhead of
+                    switching to JS.
+                </p>
+
+                <h2 class="qatitle">How does it work?</h2>
+                <p class="text">
+                    Blackberry uses the shadow-dom to encapsulate styles and
+                    isolate components. When compiling a template, it extracts
+                    the script and style tag contents and builds a vdom
+                    structure of the template. It then uses the vdom, style, and
+                    script content to create a custom
+                    <a href="https://github.com/b3nten/ivysaur" target="_blank"
+                        >ivysaur</a
+                    >
+                    component and registers it with the browser.
+                </p>
+
+                <h2 class="qatitle">Who should use this?</h2>
+                <p class="text">
+                    Anyone who wants to :) I wouldn't use this if I was building
+                    a very large or complex web application (I would use
+                    <a href="https://github.com/b3nten/ivysaur" target="_blank"
+                        >ivysaur</a
+                    >), but for smaller websites that are written either in
+                    plain HTML or in a non-javascript templating language,
+                    blackberry can be a good choice. It's small size means it's
+                    reasonable to include in a project even for just a handful
+                    of components or uses.
+                </p>
+
+                <h2 class="title">Douglas Crockford on the XML of today</h2>
+                <blockquote class="panel" style="font-style: italic">
+                    It’s probably the JavaScript frameworks. They have gotten so
+                    big and so weird. People seem to love them. I don’t
+                    understand why. The browsers have actually gotten pretty
+                    good. The web standards thing have finally worked, and the
+                    web API is stable pretty much. Some of it’s still pretty
+                    stupid, but it works and it’s reliable.
+                </blockquote>
+                <a
+                    href="https://corecursive.com/json-vs-xml-douglas-crockford/#javascript-frameworks"
+                >
+                    Read the transcript on Corecursive
+                </a>
+            </section>
+        </div>
+    </body>
+</html>
