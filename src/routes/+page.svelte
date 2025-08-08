@@ -1,12 +1,6 @@
 <script lang="ts">
   import EncryptedText from "$lib/components/encrypted_text.svelte";
   import ContactForm from "$lib/components/contact_form.svelte";
-  import WindowRenderer from "$lib/window/window_renderer.svelte";
-  import {
-    type WindowDefinition,
-    WindowDirector,
-  } from "$lib/window/window_director.svelte";
-  import Window from "$lib/window/window.svelte";
   import PageHeader from "$lib/components/page_header.svelte";
   import { preloadData } from "$app/navigation";
   import { browser } from "$app/environment";
@@ -80,10 +74,6 @@
   ];
 
   const postItems = [
-    // {
-    //  title: "augmentation, not agents",
-    //  href: "/posts/augmentation-not-agents",
-    // },
     {
       title:
         "can we use an entity-component-system architecture for everything?",
@@ -114,7 +104,6 @@
     <PageHeader
       content="Benton is a software developer specialising in full stack development."
     />
-
     <section class="home_section_container">
       <h2 class="home_section_title">About Me</h2>
       <p>
@@ -138,7 +127,6 @@
         />
       </p>
     </section>
-
     <!-- <section class="home_section_container">
    <h2 class="home_section_title">Writing</h2>
    <ul class="home_section_list">
@@ -154,7 +142,6 @@
     {/each}
    </ul>
   </section> -->
-
     <section class="home_section_container">
       <h2 class="home_section_title">
         Recent Work (<Link external href="https://droplab.com">Droplab</Link>)
@@ -172,7 +159,6 @@
         {/each}
       </ul>
     </section>
-
     <section class="home_section_container">
       <h2 class="home_section_title">Recent Work (Personal)</h2>
       <ul class="home_section_list">
@@ -188,7 +174,6 @@
         {/each}
       </ul>
     </section>
-
     <section class="home_section_container">
       <h2 class="home_section_title">Contact</h2>
       <ContactForm />
@@ -200,7 +185,6 @@
   .home {
     display: flex;
   }
-
   .home_section_container {
     margin-bottom: 3rem;
     max-width: 628px;
@@ -210,7 +194,6 @@
       font-weight: 350;
     }
   }
-
   .home_section_title {
     font-size: 1.2rem;
     font-weight: 200;
@@ -223,7 +206,6 @@
     }
     margin-bottom: 0.5rem;
   }
-
   .home_section_list {
     display: flex;
     flex-direction: column;

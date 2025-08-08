@@ -20,8 +20,10 @@
       error = errorString;
       return;
     }
+
     error = "";
     pending = true;
+
     let response = await fetch(
       `https://api.anonmsg.dev/v1/send/${env.PUBLIC_INBOX_KEY}`,
       {
