@@ -1,8 +1,8 @@
 <script lang="ts">
- import Link from "$lib/components/link.svelte";
- import PageHeader from "$lib/components/page_header.svelte";
- import cod01 from "./cod01.webp";
- import cod02 from "./cod02.png";
+import Link from "$lib/components/link.svelte";
+import PageHeader from "$lib/components/page_header.svelte";
+import cod01 from "./cod01.webp";
+import cod02 from "./cod02.png";
 </script>
 
 <svelte:head>

@@ -1,10 +1,10 @@
 <script lang="ts">
- import PageHeader from "$lib/components/page_header.svelte";
- import { fade } from "svelte/transition";
- import img01 from "./im01.webp";
- import img02 from "./im02.webp";
- import img03 from "./im03.webp";
- import Link from "$lib/components/link.svelte";
+import PageHeader from "$lib/components/page_header.svelte";
+import { fade } from "svelte/transition";
+import img01 from "./im01.webp";
+import img02 from "./im02.webp";
+import img03 from "./im03.webp";
+import Link from "$lib/components/link.svelte";
 </script>
 
 <svelte:head>

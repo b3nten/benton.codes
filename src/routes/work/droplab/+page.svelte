@@ -1,5 +1,5 @@
 <script>
-    import Droplab from "../../../work/droplab.com.svelte";
+import Droplab from "../../../work/droplab.com.svelte";
 </script>
 
 <Droplab />

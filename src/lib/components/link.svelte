@@ -1,12 +1,12 @@
 <script lang="ts">
-  import type { Snippet } from "svelte";
+import type { Snippet } from "svelte";
 
-  let props: {
-    external?: boolean;
-    underline?: boolean;
-    href: string;
-    children: Snippet;
-  } = $props();
+let props: {
+	external?: boolean;
+	underline?: boolean;
+	href: string;
+	children: Snippet;
+} = $props();
 </script>
 
 <a href={props.href} target={props.external ? "_blank" : undefined}>

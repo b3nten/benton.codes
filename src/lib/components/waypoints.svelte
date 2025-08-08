@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { slide } from "svelte/transition";
-  import EncryptedText from "./encrypted_text.svelte";
-  import Link from "./link.svelte";
+import { slide } from "svelte/transition";
+import EncryptedText from "./encrypted_text.svelte";
+import Link from "./link.svelte";
 
-  let { showHome = true, vertical = false } = $props();
+let { showHome = true, vertical = false } = $props();
 </script>
 
 <ul class="flex space-x-3 opacity-50" class:flex-col={vertical}>

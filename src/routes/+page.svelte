@@ -1,102 +1,101 @@
 <script lang="ts">
-  import EncryptedText from "$lib/components/encrypted_text.svelte";
-  import ContactForm from "$lib/components/contact_form.svelte";
-  import PageHeader from "$lib/components/page_header.svelte";
-  import { preloadData } from "$app/navigation";
-  import { browser } from "$app/environment";
-  import Link from "$lib/components/link.svelte";
+import EncryptedText from "$lib/components/encrypted_text.svelte";
+import ContactForm from "$lib/components/contact_form.svelte";
+import PageHeader from "$lib/components/page_header.svelte";
+import { preloadData } from "$app/navigation";
+import { browser } from "$app/environment";
+import Link from "$lib/components/link.svelte";
 
-  const workItems = [
-    {
-      title: "call of duty",
-      href: "/work/call-of-duty",
-      description:
-        "interactive marketing experience for Call of Duty: Black Ops 6",
-    },
-    {
-      title: "industry music",
-      href: "/work/industry-music",
-      description: "custom audio/music marketplace for Industry Music",
-    },
-    {
-      title: "chefs table",
-      href: "/work/chefs-table",
-      description:
-        "custom storefront built with headless Shopify, Sanity, and Remix",
-    },
-    {
-      title: "pepsi dataviz",
-      href: "/work/pepsi",
-      description:
-        "interactive 3d webgl data visualization illustrating how Pepsi visualizes their global operations",
-    },
-    {
-      title: "house of the dragon",
-      href: "/work/house-of-the-dragon",
-      description: "interactive dragon index microsite for HBO",
-    },
-    {
-      title: "droplab.com",
-      href: "/work/droplab",
-      description: "showcase site featuring blended html & webgl elements",
-    },
-    {
-      title: "nice.com",
-      href: "/work/nice",
-      description: "microsite for Nice.com's FluenCX product offering",
-    },
-  ];
+const workItems = [
+	{
+		title: "call of duty",
+		href: "/work/call-of-duty",
+		description:
+			"interactive marketing experience for Call of Duty: Black Ops 6",
+	},
+	{
+		title: "industry music",
+		href: "/work/industry-music",
+		description: "custom audio/music marketplace for Industry Music",
+	},
+	{
+		title: "chefs table",
+		href: "/work/chefs-table",
+		description:
+			"custom storefront built with headless Shopify, Sanity, and Remix",
+	},
+	{
+		title: "pepsi dataviz",
+		href: "/work/pepsi",
+		description:
+			"interactive 3d webgl data visualization illustrating how Pepsi visualizes their global operations",
+	},
+	{
+		title: "house of the dragon",
+		href: "/work/house-of-the-dragon",
+		description: "interactive dragon index microsite for HBO",
+	},
+	{
+		title: "droplab.com",
+		href: "/work/droplab",
+		description: "showcase site featuring blended html & webgl elements",
+	},
+	{
+		title: "nice.com",
+		href: "/work/nice",
+		description: "microsite for Nice.com's FluenCX product offering",
+	},
+];
 
-  const projectItems = [
-    {
-      title: "elysia",
-      href: "/projects/elysia",
-      description: "webgl game engine for the browser",
-    },
-    {
-      title: "vono",
-      href: "/projects/vono",
-      description:
-        "vite plugin that adds full stack server-side capabilities to client apps",
-    },
-    {
-      title: "blackberry.js",
-      href: "/blackberry.html",
-      external: true,
-      description: "reactive html components for the artisinal web",
-    },
-    {
-      title: "anonmsg.dev",
-      href: "https://anonmsg.dev",
-      external: true,
-      description: "anonymous inbox api",
-    },
-  ];
+const projectItems = [
+	{
+		title: "elysia",
+		href: "/projects/elysia",
+		description: "webgl game engine for the browser",
+	},
+	{
+		title: "vono",
+		href: "/projects/vono",
+		description:
+			"vite plugin that adds full stack server-side capabilities to client apps",
+	},
+	{
+		title: "blackberry.js",
+		href: "/blackberry.html",
+		external: true,
+		description: "reactive html components for the artisinal web",
+	},
+	{
+		title: "anonmsg.dev",
+		href: "https://anonmsg.dev",
+		external: true,
+		description: "anonymous inbox api",
+	},
+];
 
-  const postItems = [
-    {
-      title:
-        "can we use an entity-component-system architecture for everything?",
-      href: "/posts/ecs-for-everything",
-      description:
-        "what is an ecs, how does it work, and is a solution for everything?",
-    },
-    {
-      title: "solving client-server sync problems",
-      href: "/posts/solving-client-server-sync-problems",
-      description:
-        "using stable mutation ordering and immutable data to solve optimistic updates and client-server sync",
-    },
-  ];
+const postItems = [
+	{
+		title: "can we use an entity-component-system architecture for everything?",
+		href: "/posts/ecs-for-everything",
+		description:
+			"what is an ecs, how does it work, and is a solution for everything?",
+	},
+	{
+		title: "solving client-server sync problems",
+		href: "/posts/solving-client-server-sync-problems",
+		description:
+			"using stable mutation ordering and immutable data to solve optimistic updates and client-server sync",
+	},
+];
 
-  if (browser) {
-    for (let workItem of workItems) {
-      preloadData(workItem.href);
-    }
-    for (let project of projectItems) {
-      preloadData(project.href);
-    }
-  }
+if (browser) {
+	for (let workItem of workItems) {
+		preloadData(workItem.href);
+	}
+	for (let project of projectItems) {
+		preloadData(project.href);
+	}
+}
 </script>
 
 <div class="home">

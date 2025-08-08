@@ -1,22 +1,22 @@
 <script lang="ts">
-  import type {
-    WindowDefinition,
-    WindowDirector,
-  } from "./window_director.svelte";
+import type {
+	WindowDefinition,
+	WindowDirector,
+} from "./window_director.svelte";
 
-  let {
-    director,
-    window_def = {
-      content: "HELLO",
-      uuid: "test",
-      title: "Test Window",
-    },
-  }: {
-    director: WindowDirector;
-    window_def: WindowDefinition;
-  } = $props();
+let {
+	director,
+	window_def = {
+		content: "HELLO",
+		uuid: "test",
+		title: "Test Window",
+	},
+}: {
+	director: WindowDirector;
+	window_def: WindowDefinition;
+} = $props();
 
-  let root: HTMLElement | undefined; // no reactivity needed
+let root: HTMLElement | undefined; // no reactivity needed
 </script>
 
 <div

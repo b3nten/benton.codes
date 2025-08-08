@@ -1,9 +1,9 @@
 <script lang="ts">
- import Link from "$lib/components/link.svelte";
- import PageHeader from "$lib/components/page_header.svelte";
- import img01 from "./ct01.webp";
- import img02 from "./ct02.webp";
- import img03 from "./ct03.webp";
+import Link from "$lib/components/link.svelte";
+import PageHeader from "$lib/components/page_header.svelte";
+import img01 from "./ct01.webp";
+import img02 from "./ct02.webp";
+import img03 from "./ct03.webp";
 </script>
 
 <svelte:head>

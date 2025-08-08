@@ -1,11 +1,11 @@
 <script lang="ts">
- import Link from "$lib/components/link.svelte";
- import PageHeader from "$lib/components/page_header.svelte";
- import img01 from "./hod01.webp";
- import img02 from "./hod02.webp";
- import img03 from "./hod03.webp";
- import img04 from "./hod04.webp";
- import img05 from "./hod05.webp";
+import Link from "$lib/components/link.svelte";
+import PageHeader from "$lib/components/page_header.svelte";
+import img01 from "./hod01.webp";
+import img02 from "./hod02.webp";
+import img03 from "./hod03.webp";
+import img04 from "./hod04.webp";
+import img05 from "./hod05.webp";
 </script>
 
 <svelte:head>

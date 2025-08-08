@@ -1,51 +1,51 @@
 <script lang="ts">
-  import { env } from "$env/dynamic/public";
-  import { fade } from "svelte/transition";
+import { env } from "$env/dynamic/public";
+import { fade } from "svelte/transition";
 
-  let name = $state(""),
-    email = $state(""),
-    content = $state(""),
-    error = $state(""),
-    pending = $state(false),
-    success = $state(false);
+let name = $state(""),
+	email = $state(""),
+	content = $state(""),
+	error = $state(""),
+	pending = $state(false),
+	success = $state(false);
 
-  let handleSubmit = async (event: Event) => {
-    event.preventDefault();
-    if (pending) return;
-    if (!name || !email || !content) {
-      let errorString = "";
-      if (!name) errorString += "name is required. ";
-      if (!email) errorString += "email is required. ";
-      if (!content) errorString += "content is required.";
-      error = errorString;
-      return;
-    }
+let handleSubmit = async (event: Event) => {
+	event.preventDefault();
+	if (pending) return;
+	if (!name || !email || !content) {
+		let errorString = "";
+		if (!name) errorString += "name is required. ";
+		if (!email) errorString += "email is required. ";
+		if (!content) errorString += "content is required.";
+		error = errorString;
+		return;
+	}
 
-    error = "";
-    pending = true;
+	error = "";
+	pending = true;
 
-    let response = await fetch(
-      `https://api.anonmsg.dev/v1/send/${env.PUBLIC_INBOX_KEY}`,
-      {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          content,
-        }),
-      },
-    );
+	let response = await fetch(
+		`https://api.anonmsg.dev/v1/send/${env.PUBLIC_INBOX_KEY}`,
+		{
+			method: "POST",
+			headers: {
+				"content-type": "application/json",
+			},
+			body: JSON.stringify({
+				name,
+				email,
+				content,
+			}),
+		},
+	);
 
-    if (response.ok) {
-      success = true;
-    } else {
-      error = "network failed";
-    }
-    pending = false;
-  };
+	if (response.ok) {
+		success = true;
+	} else {
+		error = "network failed";
+	}
+	pending = false;
+};
 </script>
 
 <form

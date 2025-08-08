@@ -1,11 +1,11 @@
 <script lang="ts">
- import Link from "$lib/components/link.svelte";
- import PageHeader from "$lib/components/page_header.svelte";
- import dl01 from "./dl01.webp";
- import dl02 from "./dl02.webp";
- import dl03 from "./dl03.webp";
- import dl04 from "./dl04.webp";
- import dl05 from "./dl05.webp";
+import Link from "$lib/components/link.svelte";
+import PageHeader from "$lib/components/page_header.svelte";
+import dl01 from "./dl01.webp";
+import dl02 from "./dl02.webp";
+import dl03 from "./dl03.webp";
+import dl04 from "./dl04.webp";
+import dl05 from "./dl05.webp";
 </script>
 
 <svelte:head>

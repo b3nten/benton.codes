@@ -1,30 +1,27 @@
 <script lang="ts">
-  import "../app.css";
-  import GridBackground from "$lib/components/grid_bg.svelte";
-  import { onNavigate } from "$app/navigation";
-  import ProgressBar from "$lib/components/progress_bar.svelte";
-  import { is_mounted } from "$lib/misc.svelte";
-  import Waypoints from "$lib/components/waypoints.svelte";
-  import og_url from "../assets/og.jpg";
+import "../app.css";
+import GridBackground from "$lib/components/grid_bg.svelte";
+import { onNavigate } from "$app/navigation";
+import ProgressBar from "$lib/components/progress_bar.svelte";
+import { is_mounted } from "$lib/misc.svelte";
+import Waypoints from "$lib/components/waypoints.svelte";
+import og_url from "../assets/og.jpg";
 
-  let { children } = $props();
+let { children } = $props();
 
-  onNavigate((navigation) => {
-    if (
-      !document.startViewTransition ||
-      typeof navigation.delta !== "undefined"
-    )
-      return;
+onNavigate((navigation) => {
+	if (!document.startViewTransition || typeof navigation.delta !== "undefined")
+		return;
 
-    return new Promise((resolve) => {
-      document.startViewTransition(async () => {
-        resolve();
-        await navigation.complete;
-      });
-    });
-  });
+	return new Promise((resolve) => {
+		document.startViewTransition(async () => {
+			resolve();
+			await navigation.complete;
+		});
+	});
+});
 
-  let mounted = is_mounted();
+let mounted = is_mounted();
 </script>
 
 <svelte:head>

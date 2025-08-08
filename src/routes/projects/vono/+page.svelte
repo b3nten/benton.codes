@@ -1,5 +1,5 @@
 <script>
-    import Vono from "../../../projects/vono.svelte";
+import Vono from "../../../projects/vono.svelte";
 </script>
 
 <Vono />

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import EncryptedText from "./encrypted_text.svelte";
+import EncryptedText from "./encrypted_text.svelte";
 
-  let { content } = $props();
+let { content } = $props();
 </script>
 
 <h1>
