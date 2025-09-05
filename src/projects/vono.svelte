@@ -1,6 +1,7 @@
 <script lang="ts">
-import Link from "$lib/components/link.svelte";
-import PageHeader from "$lib/components/page_header.svelte";
+  import Link from "$lib/components/link.svelte";
+  import PageHeader from "$lib/components/page_header.svelte";
+  import vonoimg from "./vono.jpg";
 </script>
 
 <svelte:head>
@@ -13,6 +14,10 @@ import PageHeader from "$lib/components/page_header.svelte";
   <div class="flex flex-row items-center">
     <Link href="https://github.com/vonojs/vite" external>github</Link>
   </div>
+
+  <a class="block" target="_blank" href={vonoimg}>
+    <img class="img" src={vonoimg} />
+  </a>
 
   <p>
     Vono is a server plugin for Vite that allows developers to add server-side

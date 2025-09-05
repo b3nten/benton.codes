@@ -203,7 +203,7 @@
     }
   }
   .home_section_title {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     font-weight: 200;
     line-height: 105%;
     max-width: 1024px;
@@ -212,12 +212,12 @@
     @media (prefers-color-scheme: dark) {
       opacity: 0.75;
     }
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
   }
   .home_section_list {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.75rem;
     margin-bottom: 1.5rem;
 
     & > li {
